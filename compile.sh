@@ -1,0 +1,1 @@
+emcc -std=c++11 "cpp-audio/audio.cpp" -s USE_SDL=2 -s EXPORTED_FUNCTIONS='["_StartAudio", "_GetAmplitude", "_SetAmplitude"]' -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap"]' -s WASM=1 -o "../react-audio/public/audio.js" -s ENVIRONMENT=web -O3 -s ASSERTIONS=1
