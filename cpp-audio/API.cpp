@@ -1,29 +1,125 @@
 #define USING_SDL2
-
 #include "API.h"
+
+#include "Component.h"
+#include "Oscillator.h"
+
+using namespace audio;
 
 #ifdef USING_SDL2
 #include "SDL2Audio.h"
-SDL2Audio audio;
+SDL2Audio synth;
 #endif
-
 
 #ifdef EMSCRIPTEN
 extern "C" {
 #endif
 	
-int StartAudio() {
-	return audio.StartAudio();
+const int InitAudio() 
+{
+	return synth.InitAudio();
 }
 
-void SetAmplitude(double newAmplitude) {
-	audio.SetAmplitude(newAmplitude);
+void MasterSetAmp(const double dNewAmplitude) 
+{
+	synth.LockAudioThread();
+	synth.masterMixer.SetAmplitude(dNewAmplitude);
+	synth.UnlockAudioThread();
 }
 
-double GetAmplitude() {
-	return audio.GetAmplitude();
+const intptr_t MasterComp()
+{	
+	synth.LockAudioThread();
+	const volatile intptr_t masterMixer = reinterpret_cast<intptr_t>(&synth.masterMixer);
+	synth.UnlockAudioThread();
+
+	return masterMixer;
+}
+
+const double MasterGetAmp()
+{
+	synth.LockAudioThread();
+	volatile double amplitude = synth.masterMixer.GetAmplitude();
+	synth.UnlockAudioThread();
+
+	return amplitude;
+}
+
+void CompDelete(const intptr_t component)
+{
+	synth.LockAudioThread();
+	delete reinterpret_cast<Component*>(component);
+	synth.UnlockAudioThread();
+}
+
+const bool CompSetOut(const intptr_t component, const intptr_t output)
+{
+	synth.LockAudioThread();
+	volatile bool result = reinterpret_cast<Component*>(component)->SetOutput(reinterpret_cast<Component*>(output));
+	synth.UnlockAudioThread();
+	return result;
+}
+
+const intptr_t CompGetOut(const intptr_t component)
+{
+	synth.LockAudioThread();
+	const volatile Component* comp = reinterpret_cast<Component*>(component)->GetOutput();
+	synth.UnlockAudioThread();
+	return reinterpret_cast<intptr_t>(comp);
+}
+
+const intptr_t CompAddOsc(const double dFrequency, const double dAmplitude)
+{
+	return reinterpret_cast<intptr_t>(new Oscillator(dFrequency, dAmplitude));
+}
+
+void OscSetFreq(const intptr_t component, const double dNewFrequency)
+{
+	synth.LockAudioThread();
+	reinterpret_cast<Oscillator*>(component)->SetFrequency(dNewFrequency);
+	synth.UnlockAudioThread();
+}
+
+const double OscGetFreq(const intptr_t component)
+{
+	synth.LockAudioThread();
+	volatile double freq = reinterpret_cast<Oscillator*>(component)->GetFrequency();
+	synth.UnlockAudioThread();
+
+	return freq;
+}
+
+void OscSetAmp(const intptr_t component, const double nNewAmplitude)
+{
+	synth.LockAudioThread();
+	reinterpret_cast<Oscillator*>(component)->SetAmplitude(nNewAmplitude);
+	synth.UnlockAudioThread();
+}
+
+const double OscGetAmp(const intptr_t component)
+{
+	synth.LockAudioThread();
+	volatile double amp = reinterpret_cast<Oscillator*>(component)->GetAmplitude();
+	synth.UnlockAudioThread();
+
+	return amp;
 }
 
 #ifdef EMSCRIPTEN
 }
 #endif
+
+const std::vector<intptr_t> CompGetIn(const intptr_t component)
+{
+	std::vector<intptr_t> result;
+
+	synth.LockAudioThread();
+	result.reserve(reinterpret_cast<Component*>(component)->GetInputs().size());
+	for (const auto& input : reinterpret_cast<Component*>(component)->GetInputs())
+	{
+		result.push_back(reinterpret_cast<intptr_t>(input));
+	}
+	synth.UnlockAudioThread();
+
+	return result;
+}
