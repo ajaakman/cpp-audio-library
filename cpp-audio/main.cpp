@@ -12,23 +12,35 @@ int main(int argc, char** argv)
 	map<string, intptr_t> components;
 
 	InitAudio();
-	MasterSetAmp(0.1);
+	MasterSetAmp(0.02);
 
 	components["osc1"] = CompAddOsc(0, 0.0);
 	components["osc2"] = CompAddOsc(0, 0.0);
 	components["osc3"] = CompAddOsc(0, 0.0);
+	components["lp"] = CompAddLP();
 	
-	CompSetOut(components["osc1"], MasterComp());
+	CompSetOut(components["osc1"], components["lp"]);
 	OscSetFreq(components["osc1"], 220.0);
 	OscSetAmp(components["osc1"], 0.1);
+	OscSetPhase(components["osc1"], 0.0);
+	OscSetWave(components["osc1"], 3);
 		
-	CompSetOut(components["osc2"], MasterComp());
+	CompSetOut(components["osc2"], components["lp"]);
 	OscSetFreq(components["osc2"], 440.0);
 	OscSetAmp(components["osc2"], 0.3);
+	OscSetPhase(components["osc2"], 0.0);
+	OscSetWave(components["osc2"], 3);
 		
 	CompSetOut(components["osc3"], components["osc1"]);
 	OscSetFreq(components["osc3"], 880.0);
 	OscSetAmp(components["osc3"], 1.0);
+	OscSetPhase(components["osc3"], 0.0);
+	OscSetWave(components["osc3"], 3);
+
+	CompSetOut(components["lp"], MasterComp());
+
+	components["osc1"] = CompAddOsc(0, 0.0);
+	
 	   
 	cout << "--Audio Started. Enter Valid Command, \"commands\" For a List of Valid Commands or \"comps\" For List of Existing Components.--" << endl;
 
@@ -54,6 +66,12 @@ int main(int argc, char** argv)
 			cout << "OscSetAmp\n";
 			cout << "OscGetFreq\n";
 			cout << "OscSetFreq\n";
+			cout << "OscGetPhase\n";
+			cout << "OscSetPhase\n";
+			cout << "OscGetWave\n";
+			cout << "OscSetWave\n";
+			cout << "LPSetCutoff\n";
+			cout << "LPGetCutoff\n";
 			cout << "--Type \"exit\" to Exit.--" << endl;
 		}
 		else if (command == "comps")
@@ -299,8 +317,51 @@ int main(int argc, char** argv)
 			else
 				cout << "Oscillator: " << it->first << " Frequency: " << OscGetFreq(it->second) << "." << endl;
 		}
-		else if (command == "OscSetAmp")
+		else if (command == "OscSetPhase")
 		{			
+			cout << "Enter Component Name." << endl;
+			cin >> command;
+
+			if (command == "exit") break;
+
+			auto it = components.find(command);
+			if (it == components.end())
+				cout << "Could Not Find Component: " << command << "." << endl;
+			else
+			{
+				string subcommand;
+				double phase;
+				cout << "Enter New Oscillator Phase (double, 0.0 - 1.0)." << endl;
+				cin >> subcommand;
+				if (subcommand == "exit") break;
+
+				try
+				{
+					phase = stod(subcommand);
+					OscSetPhase(it->second, phase);
+					cout << "Oscillator " << it->first << " Phase Set To: " << OscGetPhase(components[it->first]) << "." << endl;
+				}
+				catch (invalid_argument)
+				{
+					cout << "Invalid Input Value. Expected Double." << endl;
+				}
+			}			
+		}
+		else if (command == "OscGetPhase")
+		{
+			cout << "Enter Component Name." << endl;
+			cin >> command;
+
+			if (command == "exit") break;
+
+			auto it = components.find(command);
+			if (it == components.end())
+				cout << "Could Not Find Component: " << command << "." << endl;
+			else			
+				cout << "Oscillator: " << it->first << " Phase: "<< OscGetPhase(it->second) <<"." << endl;
+		}
+		else if (command == "OscSetAmp")
+		{
 			cout << "Enter Component Name." << endl;
 			cin >> command;
 
@@ -327,7 +388,37 @@ int main(int argc, char** argv)
 				{
 					cout << "Invalid Input Value. Expected Double." << endl;
 				}
-			}			
+			}
+		}
+		else if (command == "OscSetWave")
+		{
+			cout << "Enter Component Name." << endl;
+			cin >> command;
+
+			if (command == "exit") break;
+
+			auto it = components.find(command);
+			if (it == components.end())
+				cout << "Could Not Find Component: " << command << "." << endl;
+			else
+			{
+				string subcommand;
+				int wave;
+				cout << "Enter New Oscillator Wave (int, 0 - 4): Sine, Square, Triangle, Saw, Noise." << endl;
+				cin >> subcommand;
+				if (subcommand == "exit") break;
+
+				try
+				{
+					wave = stoi(subcommand);
+					OscSetWave(it->second, wave);
+					cout << "Oscillator " << it->first << " Wave Set To: " << OscGetWave(components[it->first]) << "." << endl;
+				}
+				catch (invalid_argument)
+				{
+					cout << "Invalid Input Value. Expected Double." << endl;
+				}
+			}
 		}
 		else if (command == "OscGetAmp")
 		{
@@ -339,8 +430,64 @@ int main(int argc, char** argv)
 			auto it = components.find(command);
 			if (it == components.end())
 				cout << "Could Not Find Component: " << command << "." << endl;
-			else			
-				cout << "Oscillator: " << it->first << " Amplitude: "<< OscGetAmp(it->second) <<"." << endl;
+			else
+				cout << "Oscillator: " << it->first << " Amplitude: " << OscGetAmp(it->second) << "." << endl;
+		}
+		else if (command == "OscGetWave")
+		{
+			cout << "Enter Component Name." << endl;
+			cin >> command;
+
+			if (command == "exit") break;
+
+			auto it = components.find(command);
+			if (it == components.end())
+				cout << "Could Not Find Component: " << command << "." << endl;
+			else
+				cout << "Oscillator: " << it->first << " Current Wave: " << OscGetWave(it->second) << "." << endl;
+		}
+		else if (command == "LPSetCutoff")
+		{
+			cout << "Enter Component Name." << endl;
+			cin >> command;
+
+			if (command == "exit") break;
+
+			auto it = components.find(command);
+			if (it == components.end())
+				cout << "Could Not Find Component: " << command << "." << endl;
+			else
+			{		
+				string subcommand;
+				double cutoff;
+				cout << "Enter New Cutoff Frequency (double, 1.0 - 20000.0)." << endl;
+				cin >> subcommand;
+				if (subcommand == "exit") break;
+
+				try
+				{
+					cutoff = stod(subcommand);
+					LPSetCutoff(it->second, cutoff);
+					cout << "LP " << it->first <<" Cutoff Frequency Set To: " << LPGetCutoff(components[it->first]) << "." << endl;
+				}
+				catch (invalid_argument)
+				{
+					cout << "Invalid Input Value. Expected Double." << endl;
+				}
+			}
+		}
+		else if (command == "LPGetCutoff")
+		{
+			cout << "Enter Component Name." << endl;
+			cin >> command;
+
+			if (command == "exit") break;
+
+			auto it = components.find(command);
+			if (it == components.end())
+				cout << "Could Not Find Component: " << command << "." << endl;
+			else
+				cout << "LP: " << it->first << " Cutoff Frequency: " << LPGetCutoff(it->second) << "." << endl;
 		}
 		else
 		{

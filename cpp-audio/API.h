@@ -1,5 +1,5 @@
 #pragma once
-// TODO. Debugging.
+
 #include <cstdint>
 #ifndef EMSCRIPTEN
 #include <vector>
@@ -23,4 +23,14 @@ void OscSetFreq(const intptr_t component, const double dNewFreq);
 const double OscGetFreq(const intptr_t component);
 void OscSetAmp(const intptr_t component, const double nNewAmplitude);
 const double OscGetAmp(const intptr_t component);
+void OscSetPhase(const intptr_t component, const double nNewPhase);
+const double OscGetPhase(const intptr_t component);
+void OscSetWave(const intptr_t component, const int nNewWave);
+const int OscGetWave(const intptr_t component);
+
+const intptr_t CompAddLP();
+void LPSetCutoff(const intptr_t component, const double dNewCutoff);
+const double LPGetCutoff(const intptr_t component);
+
+
 #endif

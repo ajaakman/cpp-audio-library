@@ -3,6 +3,7 @@
 
 #include "Component.h"
 #include "Oscillator.h"
+#include "FilterLP.h"
 
 using namespace audio;
 
@@ -89,10 +90,10 @@ const double OscGetFreq(const intptr_t component)
 	return freq;
 }
 
-void OscSetAmp(const intptr_t component, const double nNewAmplitude)
+void OscSetAmp(const intptr_t component, const double dNewAmplitude)
 {
 	synth.LockAudioThread();
-	reinterpret_cast<Oscillator*>(component)->SetAmplitude(nNewAmplitude);
+	reinterpret_cast<Oscillator*>(component)->SetAmplitude(dNewAmplitude);
 	synth.UnlockAudioThread();
 }
 
@@ -103,6 +104,59 @@ const double OscGetAmp(const intptr_t component)
 	synth.UnlockAudioThread();
 
 	return amp;
+}
+
+void OscSetPhase(const intptr_t component, const double dNewPhase)
+{
+	synth.LockAudioThread();
+	reinterpret_cast<Oscillator*>(component)->SetPhase(dNewPhase);
+	synth.UnlockAudioThread();
+}
+
+const double OscGetPhase(const intptr_t component)
+{
+	synth.LockAudioThread();
+	volatile double phase = reinterpret_cast<Oscillator*>(component)->GetPhase();
+	synth.UnlockAudioThread();
+
+	return phase;
+}
+
+void OscSetWave(const intptr_t component, const int dNewWave)
+{
+	synth.LockAudioThread();
+	reinterpret_cast<Oscillator*>(component)->SetWave(static_cast<Oscillator::Wave>(dNewWave));
+	synth.UnlockAudioThread();
+}
+
+const int OscGetWave(const intptr_t component)
+{
+	synth.LockAudioThread();
+	volatile int wave = reinterpret_cast<Oscillator*>(component)->GetWave();
+	synth.UnlockAudioThread();
+
+	return wave;
+}
+
+const intptr_t CompAddLP()
+{
+	return reinterpret_cast<intptr_t>(new FilterLP());
+}
+
+void LPSetCutoff(const intptr_t component, const double dNewCutoff)
+{
+	synth.LockAudioThread();
+	reinterpret_cast<FilterLP*>(component)->SetCutoff(dNewCutoff);
+	synth.UnlockAudioThread();
+}
+
+const double LPGetCutoff(const intptr_t component)
+{
+	synth.LockAudioThread();
+	volatile double cutoff = reinterpret_cast<FilterLP*>(component)->GetCutoff();
+	synth.UnlockAudioThread();
+
+	return cutoff;
 }
 
 #ifdef EMSCRIPTEN

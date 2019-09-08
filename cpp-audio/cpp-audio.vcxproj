@@ -137,6 +137,7 @@
   <ItemGroup>
     <ClCompile Include="API.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="FilterLP.cpp" />
     <ClCompile Include="MasterMixer.cpp" />
     <ClCompile Include="Oscillator.cpp" />
     <ClCompile Include="SDL2Audio.cpp" />
@@ -146,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="API.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="FilterLP.h" />
     <ClInclude Include="Utilities.h" />
     <ClInclude Include="MasterMixer.h" />
     <ClInclude Include="Oscillator.h" />

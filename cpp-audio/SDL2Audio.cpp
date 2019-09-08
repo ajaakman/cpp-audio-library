@@ -3,7 +3,7 @@
 namespace audio
 {
 	SDL2Audio::SDL2Audio()
-		: masterMixer(&m_dTime), m_Device(NULL), m_dTime(0.0)
+		: masterMixer(&m_dTime), m_Device(NULL), m_dTime(0.0), m_Buffer()
 	{	}
 
 	SDL2Audio::~SDL2Audio()
@@ -25,10 +25,10 @@ namespace audio
 		SDL_memset(&specin, 0, sizeof(specin));
 		SDL_memset(&specout, 0, sizeof(specout));
 
-		specin.channels = 2;
-		specin.freq = 44100;
+		specin.channels = CHANNELS;
+		specin.freq = SAMPLERATE;
 		specin.format = AUDIO_S16SYS;
-		specin.samples = 4096;
+		specin.samples = BUFFERSIZE;
 		specin.userdata = this;
 		specin.callback = ForwardAudioCallback;
 
@@ -104,16 +104,15 @@ namespace audio
 
 	void SDL2Audio::AudioCallback(Uint8* const& stream, const int& streamLength)
 	{
-		for (int i = 0; i < streamLength / 2; i += 2)
+		for (unsigned i = 0; i < m_Buffer.size(); i += CHANNELS)
 		{
-			for (int j = 0; j < 2; ++j)
-			{
-				if (j == 0) // TODO. Add multichannel Support.
-					((Sint16*)stream)[i + j] = Sint16(masterMixer.GetMasterOutput() * 32767.0);
-				else
-					((Sint16*)stream)[i + j] = Sint16(masterMixer.GetMasterOutput() * 32767.0);
+			for (int j = 0; j < CHANNELS; ++j)
+			{				
+				m_Buffer[i+j] =	Sint16(masterMixer.GetMasterOutput() * 32767.0);
 			}
-			m_dTime += 1.0 / 44100.0;
+			m_dTime += 1.0 / (double)SAMPLERATE;
 		}
+
+		SDL_memcpy(stream, &m_Buffer[0], streamLength);
 	}
 }
