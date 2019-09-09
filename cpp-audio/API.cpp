@@ -69,6 +69,8 @@ const intptr_t CompGetOut(const intptr_t component)
 	return reinterpret_cast<intptr_t>(comp);
 }
 
+// New components get inserted here with python script.
+
 const intptr_t CompAddOsc(const double dFrequency, const double dAmplitude)
 {
 	return reinterpret_cast<intptr_t>(new Oscillator(dFrequency, dAmplitude));

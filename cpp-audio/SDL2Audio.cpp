@@ -106,10 +106,13 @@ namespace audio
 	{
 		for (unsigned i = 0; i < m_Buffer.size(); i += CHANNELS)
 		{
-			for (int j = 0; j < CHANNELS; ++j)
+			/*for (int j = 0; j < CHANNELS; ++j)
 			{				
 				m_Buffer[i+j] =	Sint16(masterMixer.GetMasterOutput() * 32767.0);
-			}
+			}*/
+			m_Buffer[i] = Sint16(masterMixer.GetMasterOutput() * 32767.0);
+			m_Buffer[i + 1] = m_Buffer[i]; // TODO. Add MultiChannel Support.
+
 			m_dTime += 1.0 / (double)SAMPLERATE;
 		}
 
