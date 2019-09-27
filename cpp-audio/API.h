@@ -18,7 +18,7 @@ const bool CompSetOut(const intptr_t component, const intptr_t output);
 const intptr_t CompGetOut(const intptr_t component);
 const std::vector<intptr_t> CompGetIn(const intptr_t component);
 
-const intptr_t CompAddOsc(const double dFrequency, const double dAmplitude);
+const intptr_t CompAddOsc();
 void OscSetFreq(const intptr_t component, const double dNewFreq);
 const double OscGetFreq(const intptr_t component);
 void OscSetAmp(const intptr_t component, const double nNewAmplitude);

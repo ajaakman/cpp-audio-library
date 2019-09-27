@@ -71,9 +71,9 @@ const intptr_t CompGetOut(const intptr_t component)
 
 // New components get inserted here with python script.
 
-const intptr_t CompAddOsc(const double dFrequency, const double dAmplitude)
+const intptr_t CompAddOsc()
 {
-	return reinterpret_cast<intptr_t>(new Oscillator(dFrequency, dAmplitude));
+	return reinterpret_cast<intptr_t>(new Oscillator(0.0, 0.0));
 }
 
 void OscSetFreq(const intptr_t component, const double dNewFrequency)

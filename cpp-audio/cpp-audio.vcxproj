@@ -148,6 +148,8 @@
     <ClInclude Include="API.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="FilterLP.h" />
+    <ClInclude Include="TestLoopMacros.h" />
+    <ClInclude Include="TestLoop.h" />
     <ClInclude Include="Utilities.h" />
     <ClInclude Include="MasterMixer.h" />
     <ClInclude Include="Oscillator.h" />

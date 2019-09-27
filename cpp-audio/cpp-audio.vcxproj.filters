@@ -65,5 +65,11 @@
     <ClInclude Include="FilterLP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TestLoop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestLoopMacros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,7 +7,7 @@ namespace audio
 	class Oscillator : public Component
 	{
 	public:
-		Oscillator(const double& dFrequency, const double& nAmplitude);
+		Oscillator(const double& dFrequency, const double& dAmplitude);
 
 		enum Wave {Sine, Square, Triangle, Saw, Noise};
 
