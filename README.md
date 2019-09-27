@@ -1,7 +1,7 @@
 This is a CPP component based audio library designed to be reusable and have minimal dependencies.
 
 A project using this library can be found at: http://audio.arturjaakman.com
-and its github repo: https://github.com/ajaakman/react-audio-app
+and its GUI github repo: https://github.com/ajaakman/react-audio-app
 
 compile.sh file provides the emscripten compile command to compile the library to WebAssembly.
 
