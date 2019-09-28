@@ -2,9 +2,6 @@ cmake_minimum_required(VERSION 3.15.3)
 
 project("AudioProj")
 
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS})
-
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 add_library(AudioLib STATIC
@@ -33,5 +30,18 @@ src/Example/TestLoop.h
 src/Example/TestLoopMacros.h
 )
 
+if (${CMAKE_SIZEOF_VOID_P} MATCHES 8)
+    target_link_libraries( AudioLib ${CMAKE_CURRENT_LIST_DIR}/deps/SDL2-2.0.10/lib/x64/SDL2.lib)
+else ()
+    target_link_libraries( AudioLib ${CMAKE_CURRENT_LIST_DIR}/deps/SDL2-2.0.10/lib/x86/SDL2.lib)
+endif ()
+
+if (${CMAKE_SIZEOF_VOID_P} MATCHES 8)
+    target_link_libraries( AudioLib ${CMAKE_CURRENT_LIST_DIR}/deps/SDL2-2.0.10/lib/x64/SDL2main.lib)
+else ()
+    target_link_libraries( AudioLib ${CMAKE_CURRENT_LIST_DIR}/deps/SDL2-2.0.10/lib/x86/SDL2main.lib)
+endif ()
+
+include_directories(deps/SDL2-2.0.10/include)
+
 target_link_libraries( ${AudioApp} AudioLib )
-target_link_libraries( AudioLib ${SDL2_LIBRARIES})

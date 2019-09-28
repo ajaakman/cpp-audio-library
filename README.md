@@ -5,7 +5,7 @@ and its GUI github repo: https://github.com/ajaakman/react-audio-app
 
 compile.sh file provides the emscripten compile command to compile the library to WebAssembly.
 
-vs2019 folder contains a Visual Studio 2019 solution generated with CMake. AudioLib.vcxproj is the static audio library. Example.vsxproj is an example project showing how to use the audio library.
+vs2019 folder contains a Visual Studio 2019 solution. AudioLib.vcxproj is the static audio library. Example.vsxproj is an example project showing how to use the audio library.
 
 src/API.cpp file contains implementation for the libraries public API functions.
 
