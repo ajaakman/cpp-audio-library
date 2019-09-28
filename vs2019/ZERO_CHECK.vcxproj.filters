@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\dev\Portfolio\audio-app\cpp-audio\build\CMakeFiles\3aeb1a4e87ca98b115ac0bab8054da29\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{AD965293-36C1-392C-9722-30FA786F90C1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

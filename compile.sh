@@ -1,11 +1,11 @@
 emcc -std=c++11 \
-"cpp-audio/API.cpp" \
-"cpp-audio/Oscillator.cpp" \
-"cpp-audio/FilterLP.cpp" \
-"cpp-audio/MasterMixer.cpp" \
-"cpp-audio/SDL2Audio.cpp" \
-"cpp-audio/Component.cpp" \
-"cpp-audio/Utilities.cpp" \
+"src/Utilities.cpp" \
+"src/API.cpp" \
+"src/Components/FilterLP.cpp" \
+"src/Components/MasterMixer.cpp" \
+"src/Components/Oscillator.cpp" \
+"src/Components/Component.cpp" \
+"src/Audio/SDL2Audio.cpp" \
 -s USE_SDL=2 -s \
 EXPORTED_FUNCTIONS='["_InitAudio", 
 "_MasterComp", 

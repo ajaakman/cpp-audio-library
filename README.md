@@ -5,9 +5,11 @@ and its GUI github repo: https://github.com/ajaakman/react-audio-app
 
 compile.sh file provides the emscripten compile command to compile the library to WebAssembly.
 
-API.cpp file contains implementation for the libraries public API functions.
+vs2019 folder contains a Visual Studio 2019 solution generated with CMake. AudioLib.vcxproj is the static audio library. Example.vsxproj is an example project showing how to use the audio library.
 
-main.cpp file contains an example demo.
+src/API.cpp file contains implementation for the libraries public API functions.
+
+main.cpp file in the src/example folder contains an example demo.
 
 The project uses the SDL2 audio library for writing to the audio buffer. The implementation can be found in the SDL2Audio Class. Any other audio API or Library, such as PortAudio, can be used for this task. The implementation needs to inherit from the IAudio interface.
 
@@ -18,4 +20,4 @@ Currently implemented Audio Components:
 2. Oscillator
 3. LPFilter
 
-The Scripts folder contains a 'generate_component.py' Python script to generate some boilerplate code for making a new audio component class.
+The scripts folder contains a 'generate_component.py' Python script to generate some boilerplate code for making a new audio component class.

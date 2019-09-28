@@ -3,7 +3,7 @@ ShortName = raw_input("Enter Short Name... ")
 
 hcontents = """#pragma once
 
-#include "Component.h"
+#include "./Component.h"
 
 namespace audio
 {
@@ -17,7 +17,7 @@ namespace audio
 }
 """
 
-f=open("../cpp-audio/"+LongName + ".h","a+")
+f=open("../src/Components/"+LongName + ".h","a+")
 f.write(hcontents)
 f.close()
 
@@ -37,19 +37,19 @@ namespace audio {
 }
 """
 
-f=open("../cpp-audio/"+LongName + ".cpp","a+")
+f=open("../src/Component/"+LongName + ".cpp","a+")
 f.write(cppcontents)
 f.close()
 
 # -------------------------------------------------------------------------------------------------------------------------------------------
 
-compileContent1 = """"cpp-audio/"""+LongName+""".cpp" \\"""
+compileContent1 = """"./src/Component/"""+LongName+""".cpp" \\"""
 
 inputfile = open('../compile.sh', 'r').readlines()
 write_file = open('../compile.sh','wb')
 for line in inputfile:
     write_file.write(line)
-    if '"cpp-audio/API.cpp"' in line:               
+    if '"src/API.cpp"' in line:               
         write_file.write(compileContent1 + "\n") 
 write_file.close()
 
@@ -70,8 +70,8 @@ write_file.close()
 apihcontent = """
 const intptr_t CompAdd"""+ShortName+"""(); """
 
-inputfile = open('../cpp-audio/API.h', 'r').readlines()
-write_file = open('../cpp-audio/API.h','w')
+inputfile = open('../src/API.h', 'r').readlines()
+write_file = open('../src/API.h','w')
 for line in inputfile:
     write_file.write(line)
     if 'const std::vector<intptr_t> CompGetIn(const intptr_t component);' in line:               
@@ -82,11 +82,11 @@ write_file.close()
 
 apicppcontent1 = """#include \""""+LongName+""".h\""""
 
-inputfile = open('../cpp-audio/API.cpp', 'r').readlines()
-write_file = open('../cpp-audio/API.cpp','w')
+inputfile = open('../src/API.cpp', 'r').readlines()
+write_file = open('../src/API.cpp','w')
 for line in inputfile:
     write_file.write(line)
-    if '#include "Component.h"' in line:               
+    if '#include "./Component.h"' in line:               
         write_file.write(apicppcontent1 + "\n") 
 write_file.close()
 
@@ -98,8 +98,8 @@ const intptr_t CompAdd"""+ShortName+"""()
 	return reinterpret_cast<intptr_t>(new """+LongName+"""());
 }"""
 
-inputfile = open('../cpp-audio/API.cpp', 'r').readlines()
-write_file = open('../cpp-audio/API.cpp','w')
+inputfile = open('../src/API.cpp', 'r').readlines()
+write_file = open('../src/API.cpp','w')
 for line in inputfile:
     write_file.write(line)
     if '// New components get inserted here with python script.' in line:               
