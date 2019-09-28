@@ -32,13 +32,9 @@ src/Example/TestLoopMacros.h
 
 if (${CMAKE_SIZEOF_VOID_P} MATCHES 8)
     target_link_libraries( AudioLib ${CMAKE_CURRENT_LIST_DIR}/deps/SDL2-2.0.10/lib/x64/SDL2.lib)
-else ()
-    target_link_libraries( AudioLib ${CMAKE_CURRENT_LIST_DIR}/deps/SDL2-2.0.10/lib/x86/SDL2.lib)
-endif ()
-
-if (${CMAKE_SIZEOF_VOID_P} MATCHES 8)
     target_link_libraries( AudioLib ${CMAKE_CURRENT_LIST_DIR}/deps/SDL2-2.0.10/lib/x64/SDL2main.lib)
 else ()
+    target_link_libraries( AudioLib ${CMAKE_CURRENT_LIST_DIR}/deps/SDL2-2.0.10/lib/x86/SDL2.lib)
     target_link_libraries( AudioLib ${CMAKE_CURRENT_LIST_DIR}/deps/SDL2-2.0.10/lib/x86/SDL2main.lib)
 endif ()
 
