@@ -1,4 +1,4 @@
-C:/dev/Portfolio/audio-app/cpp-audio/build/CMakeFiles/AudioLib.dir
-C:/dev/Portfolio/audio-app/cpp-audio/build/CMakeFiles/Example.dir
-C:/dev/Portfolio/audio-app/cpp-audio/build/CMakeFiles/ALL_BUILD.dir
-C:/dev/Portfolio/audio-app/cpp-audio/build/CMakeFiles/ZERO_CHECK.dir
+C:/dev/Portfolio/audio-app/cpp-audio/vs2019/CMakeFiles/AudioLib.dir
+C:/dev/Portfolio/audio-app/cpp-audio/vs2019/CMakeFiles/Example.dir
+C:/dev/Portfolio/audio-app/cpp-audio/vs2019/CMakeFiles/ALL_BUILD.dir
+C:/dev/Portfolio/audio-app/cpp-audio/vs2019/CMakeFiles/ZERO_CHECK.dir

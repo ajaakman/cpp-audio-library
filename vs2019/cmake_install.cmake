@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/dev/Portfolio/audio-app/cpp-audio/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/dev/Portfolio/audio-app/cpp-audio/vs2019/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

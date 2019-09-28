@@ -85,8 +85,8 @@ C:/Program Files (x86)/CMake/share/cmake-3.15/Modules/Platform/Windows-MSVC.cmak
 C:/Program Files (x86)/CMake/share/cmake-3.15/Modules/Platform/Windows.cmake
 C:/Program Files (x86)/CMake/share/cmake-3.15/Modules/Platform/WindowsPaths.cmake
 C:/dev/Portfolio/audio-app/cpp-audio/CMakeLists.txt
-C:/dev/Portfolio/audio-app/cpp-audio/build/CMakeFiles/3.15.3/CMakeCCompiler.cmake
-C:/dev/Portfolio/audio-app/cpp-audio/build/CMakeFiles/3.15.3/CMakeCXXCompiler.cmake
-C:/dev/Portfolio/audio-app/cpp-audio/build/CMakeFiles/3.15.3/CMakeRCCompiler.cmake
-C:/dev/Portfolio/audio-app/cpp-audio/build/CMakeFiles/3.15.3/CMakeSystem.cmake
 C:/dev/Portfolio/audio-app/cpp-audio/deps/SDL2-2.0.10/sdl2-config.cmake
+C:/dev/Portfolio/audio-app/cpp-audio/vs2019/CMakeFiles/3.15.3/CMakeCCompiler.cmake
+C:/dev/Portfolio/audio-app/cpp-audio/vs2019/CMakeFiles/3.15.3/CMakeCXXCompiler.cmake
+C:/dev/Portfolio/audio-app/cpp-audio/vs2019/CMakeFiles/3.15.3/CMakeRCCompiler.cmake
+C:/dev/Portfolio/audio-app/cpp-audio/vs2019/CMakeFiles/3.15.3/CMakeSystem.cmake
