@@ -7,15 +7,15 @@ hcontents = """#pragma once
 
 namespace audio
 {
-	class """+LongName+""" : public Component
+	class %s : public Component
 	{
 	public:
-		"""+LongName+"""();
+		%s();
 		virtual void CalcSample(double& dSample) override;
 	};
 
 }
-"""
+""" % (LongName, LongName)
 
 f=open("../src/Components/"+LongName + ".h","a+")
 f.write(hcontents)
@@ -23,27 +23,27 @@ f.close()
 
 # -------------------------------------------------------------------------------------------------------------------------------------------
 
-cppcontents = """#include \""""+LongName+""".h\"
+cppcontents = """#include "./%s.h"
 
 namespace audio {
 
-	"""+LongName+"""::"""+LongName+"""()		
+	%s::%s()		
 	{}
 
-	void """+LongName+"""::CalcSample(double& dSample)
+	void %s::CalcSample(double& dSample)
 	{	
 	}
 
 }
-"""
+""" % (LongName, LongName, LongName, LongName)
 
-f=open("../src/Component/"+LongName + ".cpp","a+")
+f=open("../src/Components/"+LongName + ".cpp","a+")
 f.write(cppcontents)
 f.close()
 
 # -------------------------------------------------------------------------------------------------------------------------------------------
 
-compileContent1 = """"./src/Component/"""+LongName+""".cpp" \\"""
+compileContent1 = """"src/Component/%s.cpp" \\""" % LongName
 
 inputfile = open('../compile.sh', 'r').readlines()
 write_file = open('../compile.sh','wb')
@@ -55,7 +55,7 @@ write_file.close()
 
 # -------------------------------------------------------------------------------------------------------------------------------------------
 
-compileContent2 = """"_CompAdd"""+ShortName+"""", """
+compileContent2 = """"_CompAdd%s", """ % ShortName
 
 inputfile = open('../compile.sh', 'r').readlines()
 write_file = open('../compile.sh','wb')
@@ -68,7 +68,7 @@ write_file.close()
 # -------------------------------------------------------------------------------------------------------------------------------------------
 
 apihcontent = """
-const intptr_t CompAdd"""+ShortName+"""(); """
+const intptr_t CompAdd%s(); """ % ShortName
 
 inputfile = open('../src/API.h', 'r').readlines()
 write_file = open('../src/API.h','w')
@@ -80,7 +80,7 @@ write_file.close()
 
 # -------------------------------------------------------------------------------------------------------------------------------------------
 
-apicppcontent1 = """#include \""""+LongName+""".h\""""
+apicppcontent1 = """#include "./%s.h\"""" % LongName
 
 inputfile = open('../src/API.cpp', 'r').readlines()
 write_file = open('../src/API.cpp','w')
@@ -93,10 +93,10 @@ write_file.close()
 # -------------------------------------------------------------------------------------------------------------------------------------------
 
 apicppcontent2 = """
-const intptr_t CompAdd"""+ShortName+"""()
+const intptr_t CompAdd%s()
 {
-	return reinterpret_cast<intptr_t>(new """+LongName+"""());
-}"""
+	return reinterpret_cast<intptr_t>(new %s());
+}""" % (ShortName, LongName)
 
 inputfile = open('../src/API.cpp', 'r').readlines()
 write_file = open('../src/API.cpp','w')
