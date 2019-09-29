@@ -3,6 +3,7 @@ This is a CPP component based audio library designed to be reusable and have min
 A project using this library can be found at: http://audio.arturjaakman.com
 and its GUI github repo: https://github.com/ajaakman/react-audio-app
 
+UML class diagram can be found in 'other' folder.
 compile.sh file provides the emscripten compile command to compile the library to WebAssembly.
 
 vs2019 folder contains a Visual Studio 2019 solution. AudioLib.vcxproj is the static audio library. Example.vsxproj is an example project showing how to use the audio library.
