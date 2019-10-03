@@ -4,7 +4,7 @@
 
 namespace audio
 {
-	class FilterLP : public Component
+	class FilterLP final : public Component
 	{
 	public:
 		FilterLP();

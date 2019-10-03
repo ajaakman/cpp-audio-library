@@ -4,7 +4,7 @@
 
 namespace audio
 {
-	class MasterMixer : public Component
+	class MasterMixer final : public Component
 	{
 	public:
 		MasterMixer(double* const& dTime);

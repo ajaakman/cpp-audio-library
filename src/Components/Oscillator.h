@@ -4,7 +4,7 @@
 
 namespace audio
 {
-	class Oscillator : public Component
+	class Oscillator final : public Component
 	{
 	public:
 		Oscillator(const double& dFrequency, const double& dAmplitude);

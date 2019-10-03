@@ -14,8 +14,8 @@ SDL2Audio synth;
 
 #ifdef EMSCRIPTEN
 extern "C" {
-#endif
-	
+#endif	
+
 const int InitAudio() 
 {
 	return synth.InitAudio();

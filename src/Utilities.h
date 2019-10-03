@@ -2,7 +2,7 @@
 
 namespace audio {
 
-	class Utilities 
+	class Utilities final
 	{
 	public:				
 		static const double & Clamp(const double & dValue, const double & dMin, const double & dMax);

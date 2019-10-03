@@ -11,7 +11,7 @@
 
 namespace audio
 {
-	class SDL2Audio : public IAudio
+	class SDL2Audio final: public IAudio
 	{
 	public:
 		SDL2Audio();
