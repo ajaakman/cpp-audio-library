@@ -12,7 +12,6 @@ if (it == components.end())																										\
 	cout << "Could Not Find Component: " << command << "." << endl;																\
 else
 
-
 #define CREATOR(COMP, LNAME)																									\
 else if (command == "CompAdd"#COMP)																								\
 {																																\
@@ -34,14 +33,12 @@ else if (command == "CompAdd"#COMP)																								\
 	}																															\
 }
 
-
 #define GETTER(COMP, PARAM, LCOMP, LPARAM)																						\
 else if (command == #COMP"Get"#PARAM)																							\
 {																																\
 	COMPLOOKUP																													\
 		cout << #LCOMP": " << it->first << " "#LPARAM": " << COMP##Get##PARAM(it->second) << "." << endl;						\
 }
-
 
 #define SETTER(COMP, PARAM, LCOMP, LPARAM, TYPE, MESSAGE)																		\
 else if (command == #COMP"Set"#PARAM)																							\

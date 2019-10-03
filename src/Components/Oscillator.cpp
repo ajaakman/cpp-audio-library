@@ -13,7 +13,7 @@ namespace audio
 		SetAmplitude(dAmplitude);
 	}
 
-	void Oscillator::CalcSample(double & dSample)
+	void Oscillator::CalcSample(double& dSample)
 	{
 		const double sine = sin(m_dFrequency * 2.0 * acos(-1.0) * SampleTime() + (m_dPhase * 2.0 * acos(-1.0)));
 		switch (m_Wave)

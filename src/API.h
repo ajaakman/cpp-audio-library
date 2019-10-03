@@ -10,7 +10,7 @@ const int InitAudio();
 
 const intptr_t MasterComp();
 void MasterSetAmp(const double dNewAmplitude);
-const double MasterGetAmp(); 
+const double MasterGetAmp();
 
 void CompDelete(const intptr_t component);
 const bool CompSetOut(const intptr_t component, const intptr_t output);
@@ -31,6 +31,5 @@ const int OscGetWave(const intptr_t component);
 const intptr_t CompAddLP();
 void LPSetCutoff(const intptr_t component, const double dNewCutoff);
 const double LPGetCutoff(const intptr_t component);
-
 
 #endif

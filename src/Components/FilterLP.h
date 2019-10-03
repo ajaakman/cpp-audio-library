@@ -16,6 +16,4 @@ namespace audio
 		double m_dPrevSample;
 		double m_dCutoff;
 	};
-
 }
-

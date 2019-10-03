@@ -31,22 +31,22 @@ void TestLoop(std::map<std::string, intptr_t>& components)
 			cout << "CompSetOut\n";
 			// Creators
 			cout << "CompAddLP\n",
-				cout << "CompAddOsc\n",
-				// Getters
-				cout << "LPGetCutoff\n",
-				cout << "OscGetPhase\n",
-				cout << "OscGetWave\n",
-				cout << "OscGetFreq\n",
-				cout << "OscGetAmp\n",
-				cout << "MasterGetAmp\n",
-				// Setters
-				cout << "LPSetCutoff\n",
-				cout << "OscSetWave\n",
-				cout << "OscSetPhase\n",
-				cout << "OscSetFreq\n",
-				cout << "OscSetAmp\n",
-				cout << "MasterSetAmp\n",
-				cout << "--Type \"exit\" to Exit.--" << endl;
+			cout << "CompAddOsc\n",
+			// Getters
+			cout << "LPGetCutoff\n",
+			cout << "OscGetPhase\n",
+			cout << "OscGetWave\n",
+			cout << "OscGetFreq\n",
+			cout << "OscGetAmp\n",
+			cout << "MasterGetAmp\n",
+			// Setters
+			cout << "LPSetCutoff\n",
+			cout << "OscSetWave\n",
+			cout << "OscSetPhase\n",
+			cout << "OscSetFreq\n",
+			cout << "OscSetAmp\n",
+			cout << "MasterSetAmp\n",
+			cout << "--Type \"exit\" to Exit.--" << endl;
 		}
 		else if (command == "comps")
 		{

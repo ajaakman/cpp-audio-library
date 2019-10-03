@@ -9,9 +9,9 @@ namespace audio
 	public:
 		Oscillator(const double& dFrequency, const double& dAmplitude);
 
-		enum Wave {Sine, Square, Triangle, Saw, Noise};
+		enum Wave { Sine, Square, Triangle, Saw, Noise };
 
-		virtual void CalcSample(double & dSample) override;
+		virtual void CalcSample(double& dSample) override;
 
 		void SetAmplitude(const double& dNewAmplitude);
 		const double& GetAmplitude() const;
@@ -29,4 +29,3 @@ namespace audio
 		double m_dPhase;
 	};
 }
-

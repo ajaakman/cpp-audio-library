@@ -16,11 +16,14 @@ namespace audio
 		virtual const std::vector<Component*>& GetInputs() const;
 		virtual const Component* const GetOutput() const;
 
+		Component(const Component&) = delete; // TODO
+		Component& operator=(const Component&) = delete;
+
 	protected:
 		static const double& SampleTime();
 	private:
 		// CalcSample() runs for every audio sample and should assign a new value to the dSample input parameter variable.
-		virtual void CalcSample(double & dSample) = 0;
+		virtual void CalcSample(double& dSample) = 0;
 
 		friend class MasterMixer;
 
@@ -33,6 +36,5 @@ namespace audio
 
 		std::vector<Component*> m_Inputs;
 		Component* m_Output;
-
 	};
 }

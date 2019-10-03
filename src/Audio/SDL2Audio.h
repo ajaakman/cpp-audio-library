@@ -11,7 +11,7 @@
 
 namespace audio
 {
-	class SDL2Audio final: public IAudio
+	class SDL2Audio final : public IAudio
 	{
 	public:
 		SDL2Audio();
@@ -30,7 +30,7 @@ namespace audio
 
 	private:
 		SDL_AudioDeviceID m_Device;
-		std::array<Sint16, CHANNELS * BUFFERSIZE> m_Buffer;
+		std::array<Sint16, CHANNELS* BUFFERSIZE> m_Buffer;
 
 		double m_dTime;
 	};

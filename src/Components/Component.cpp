@@ -23,16 +23,16 @@ namespace audio
 		// Must not receive input from self.
 		if (input == this) return false;
 		// Prevent same input from being added multiple times.
-		for (const auto& in : m_Inputs)		
-			if (in == input) return false;		
-		
+		for (const auto& in : m_Inputs)
+			if (in == input) return false;
+
 		m_Inputs.push_back(input);
 		return true;
 	};
 
 	const bool Component::RemoveInput(Component* const& input)
 	{
-		// AddInput ensures the inputs are unique so we only need to remove the first one encountered.		
+		// AddInput ensures the inputs are unique so we only need to remove the first one encountered.
 		const auto it = std::find(m_Inputs.begin(), m_Inputs.end(), input);
 		if (it != m_Inputs.end())
 		{
@@ -47,7 +47,7 @@ namespace audio
 	{
 		// Must not output in to self.
 		if (newOuput == this) return false;
-		// Remove component from old output. 
+		// Remove component from old output.
 		if (m_Output != nullptr)
 			m_Output->RemoveInput(this);
 		// Add component to new output.
@@ -71,15 +71,15 @@ namespace audio
 	const double& Component::SampleTime()
 	{
 		return *m_dTime;
-	}	
+	}
 
 	double& Component::CombineInputs()
 	{
 		m_dOutSample = 0.0;
-		
-		for (const auto& input : m_Inputs)		
+
+		for (const auto& input : m_Inputs)
 			m_dOutSample += input->FinalOutput();
-		
+
 		return m_dOutSample;
 	}
 
@@ -89,5 +89,4 @@ namespace audio
 		CalcSample(m_dOutSample);
 		return m_dOutSample;
 	};
-
 }

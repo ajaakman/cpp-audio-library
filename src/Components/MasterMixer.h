@@ -9,7 +9,7 @@ namespace audio
 	public:
 		MasterMixer(double* const& dTime);
 
-		virtual void CalcSample(double & dSample) override;
+		virtual void CalcSample(double& dSample) override;
 		virtual const bool SetOutput(Component* const& newOutput) override;
 		virtual const Component* const GetOutput() const override;
 		const double& GetMasterOutput();
@@ -20,7 +20,5 @@ namespace audio
 	private:
 		double m_dAmplitude;
 		double m_dAmpTarget;
-
 	};
 }
-
