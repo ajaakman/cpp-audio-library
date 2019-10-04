@@ -2,7 +2,6 @@
 
 #include "../Utilities.h"
 
-#define _USE_MATH_DEFINES
 #include <math.h>
 
 namespace audio
@@ -16,7 +15,7 @@ namespace audio
 
 	void Oscillator::CalcSample(std::array<double, CHANNELS> & dSample)
 	{
-		const double sine = sin(m_dFrequency * 2.0 * M_PI * SampleTime() + (m_dPhase * 2.0 * M_PI));
+		const double sine = sin(m_dFrequency * TWO_PI<double> * SampleTime() + (m_dPhase * TWO_PI<double>));
 		double wave = 0.0;
 		switch (m_Wave)
 		{
@@ -27,10 +26,10 @@ namespace audio
 			wave = signbit(sine);
 			break;
 		case audio::Oscillator::Triangle:
-			wave = asin(sine) * M_2_PI;
+			wave = asin(sine) * TWO_OVER_PI<double>;
 			break;
 		case audio::Oscillator::Saw:
-			wave = -2 / M_PI * atan(1.0 / tan(m_dFrequency * SampleTime() * M_PI + (m_dPhase * M_PI)));
+			wave = -2 / PI<double> * atan(1.0 / tan(m_dFrequency * SampleTime() * PI<double> + (m_dPhase * PI<double>)));
 			break;
 		case audio::Oscillator::Noise:
 			wave = 2.0 * ((double)rand() / (double)RAND_MAX) - 1.0;
