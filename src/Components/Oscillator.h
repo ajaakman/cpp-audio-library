@@ -11,7 +11,7 @@ namespace audio
 
 		enum Wave { Sine, Square, Triangle, Saw, Noise };
 
-		virtual void CalcSample(double& dSample) override;
+		virtual void CalcSample(std::array<double, CHANNELS>& dSample) override;
 
 		void SetAmplitude(const double& dNewAmplitude);
 		const double& GetAmplitude() const;

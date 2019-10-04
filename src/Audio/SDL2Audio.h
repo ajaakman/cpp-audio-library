@@ -1,9 +1,7 @@
 #pragma once
-#define SAMPLERATE 44100
-#define CHANNELS 2
-#define BUFFERSIZE 4096
 
 #include "./IAudio.h"
+#include "../Globals.h"
 #include "../Components/MasterMixer.h"
 
 #include <array>
@@ -30,7 +28,7 @@ namespace audio
 
 	private:
 		SDL_AudioDeviceID m_Device;
-		std::array<Sint16, CHANNELS* BUFFERSIZE> m_Buffer;
+		std::array<Sint16, CHANNELS * BUFFERSIZE> m_Buffer;
 
 		double m_dTime;
 	};

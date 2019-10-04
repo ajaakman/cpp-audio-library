@@ -5,7 +5,7 @@ namespace audio
 	double* Component::m_dTime = nullptr;
 
 	Component::Component()
-		: m_Output(nullptr), m_dOutSample(0.0)
+		: m_Output(nullptr), m_OutSample()
 	{}
 
 	Component::~Component()
@@ -73,20 +73,29 @@ namespace audio
 		return *m_dTime;
 	}
 
-	double& Component::CombineInputs()
+	std::array<double, CHANNELS>& Component::CombineInputs()
 	{
-		m_dOutSample = 0.0;
+		for (auto& sample : m_OutSample)
+		{
+			sample = 0.0;
+		}
 
 		for (const auto& input : m_Inputs)
-			m_dOutSample += input->FinalOutput();
+		{
+			auto out = input->FinalOutput();
+			for (size_t i = 0; i < out.size(); ++i)
+			{
+				m_OutSample[i] += out[i];
+			}
+		}
 
-		return m_dOutSample;
+		return m_OutSample;
 	}
 
-	const double& Component::FinalOutput()
+	const std::array<double, CHANNELS>& Component::FinalOutput()
 	{
 		CombineInputs();
-		CalcSample(m_dOutSample);
-		return m_dOutSample;
+		CalcSample(m_OutSample);
+		return m_OutSample;
 	};
 }

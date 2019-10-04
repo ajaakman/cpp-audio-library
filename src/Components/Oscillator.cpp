@@ -2,6 +2,7 @@
 
 #include "../Utilities.h"
 
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 namespace audio
@@ -13,30 +14,36 @@ namespace audio
 		SetAmplitude(dAmplitude);
 	}
 
-	void Oscillator::CalcSample(double& dSample)
+	void Oscillator::CalcSample(std::array<double, CHANNELS> & dSample)
 	{
-		const double sine = sin(m_dFrequency * 2.0 * acos(-1.0) * SampleTime() + (m_dPhase * 2.0 * acos(-1.0)));
+		const double sine = sin(m_dFrequency * 2.0 * M_PI * SampleTime() + (m_dPhase * 2.0 * M_PI));
+		double wave = 0.0;
 		switch (m_Wave)
 		{
 		case audio::Oscillator::Sine:
-			dSample += sine;
+			wave = sine;
 			break;
 		case audio::Oscillator::Square:
-			dSample += signbit(sine);
+			wave = signbit(sine);
 			break;
 		case audio::Oscillator::Triangle:
-			dSample += asin(sine) * 2.0 / acos(-1.0);
+			wave = asin(sine) * M_2_PI;
 			break;
 		case audio::Oscillator::Saw:
-			dSample += -2 / acos(-1.0) * atan(1.0 / tan(m_dFrequency * SampleTime() * acos(-1.0) + (m_dPhase * acos(-1.0))));
+			wave = -2 / M_PI * atan(1.0 / tan(m_dFrequency * SampleTime() * M_PI + (m_dPhase * M_PI)));
 			break;
 		case audio::Oscillator::Noise:
-			dSample += 2.0 * ((double)rand() / (double)RAND_MAX) - 1.0;
+			wave = 2.0 * ((double)rand() / (double)RAND_MAX) - 1.0;
 			break;
 		default:
 			break;
 		}
-		dSample *= m_dAmplitude;
+
+		for (size_t i = 0; i < dSample.size(); i++)
+		{
+			dSample[i] += wave;
+			dSample[i] *= m_dAmplitude;
+		}
 	}
 
 	void Oscillator::SetAmplitude(const double& dNewAmplitude)

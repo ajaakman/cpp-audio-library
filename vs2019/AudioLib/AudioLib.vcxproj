@@ -158,6 +158,7 @@
     <ClInclude Include="..\..\src\Components\FilterLP.h" />
     <ClInclude Include="..\..\src\Components\MasterMixer.h" />
     <ClInclude Include="..\..\src\Components\Oscillator.h" />
+    <ClInclude Include="..\..\src\Globals.h" />
     <ClInclude Include="..\..\src\Utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

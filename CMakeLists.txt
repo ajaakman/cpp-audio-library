@@ -7,6 +7,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 add_library(AudioLib STATIC
 src/API.h
 src/API.cpp
+src/Globals.h
 src/Utilities.h
 src/Utilities.cpp
 src/Audio/IAudio.h

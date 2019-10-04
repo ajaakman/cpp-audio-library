@@ -1,6 +1,9 @@
 #pragma once
 
+#include "../Globals.h"
+
 #include <vector>
+#include <array>
 
 namespace audio
 {
@@ -23,16 +26,16 @@ namespace audio
 		static const double& SampleTime();
 	private:
 		// CalcSample() runs for every audio sample and should assign a new value to the dSample input parameter variable.
-		virtual void CalcSample(double& dSample) = 0;
+		virtual void CalcSample(std::array<double, CHANNELS>& dSample) = 0;
 
 		friend class MasterMixer;
 
-		const double& FinalOutput();
-		double& CombineInputs();
+		const std::array<double, CHANNELS>& FinalOutput();
+		std::array<double, CHANNELS>& CombineInputs();
 
 	private:
 		static double* m_dTime;
-		double m_dOutSample;
+		std::array<double, CHANNELS> m_OutSample;
 
 		std::vector<Component*> m_Inputs;
 		Component* m_Output;

@@ -14,7 +14,8 @@ namespace audio
 
 	const int SDL2Audio::InitAudio()
 	{
-		if (SDL_Init(SDL_INIT_AUDIO) != 0) {
+		if (SDL_Init(SDL_INIT_AUDIO) != 0)
+		{
 			SDL_Log("Unable to initialize SDL: %s.", SDL_GetError());
 			return 101;
 		}
@@ -104,14 +105,13 @@ namespace audio
 
 	void SDL2Audio::AudioCallback(Uint8* const& stream, const int& streamLength)
 	{
-		for (unsigned i = 0; i < m_Buffer.size(); i += CHANNELS)
+		for (size_t i = 0; i < m_Buffer.size(); i += CHANNELS)
 		{
-			/*for (int j = 0; j < CHANNELS; ++j)
+			auto out = masterMixer.GetMasterOutput();
+			for (unsigned j = 0; j < CHANNELS; j++)
 			{
-				m_Buffer[i+j] =	Sint16(masterMixer.GetMasterOutput() * 32767.0);
-			}*/
-			m_Buffer[i] = Sint16(masterMixer.GetMasterOutput() * 32767.0);
-			m_Buffer[i + 1] = m_Buffer[i]; // TODO. Add MultiChannel Support.
+				m_Buffer[i + j] = Sint16(out[j] * 32767.0);
+			}
 
 			m_dTime += 1.0 / (double)SAMPLERATE;
 		}

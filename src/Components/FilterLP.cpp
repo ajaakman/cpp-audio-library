@@ -1,17 +1,25 @@
 #include "./FilterLP.h"
 #include "../Utilities.h"
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 namespace audio {
 	FilterLP::FilterLP()
-		: m_dPrevSample(0.0), m_dCutoff(20000.0)
+		: m_dPrevSample(), m_dCutoff(20000.0)
 	{}
 
-	void FilterLP::CalcSample(double& dSample)
+	void FilterLP::CalcSample(std::array<double, CHANNELS>& dSample)
 	{
-		for (int i = 0; i < 4; ++i)
-			dSample = m_dPrevSample
-			+ (1.0 / 44100.0 / (1.0 / (m_dCutoff * 2.0 * 3.14) + 1.0 / 44100.0) // TODO. Check that sample rate matches.
-				* (dSample - m_dPrevSample));
+		for (size_t i = 0; i < dSample.size(); i++)
+		{
+			for (unsigned j = 0; j < 4; ++j)
+			{
+				dSample[i] = m_dPrevSample[i]
+					+ (1.0 / (double)SAMPLERATE / (1.0 / (m_dCutoff * 2.0 * M_PI) + 1.0 / (double)SAMPLERATE)
+						* (dSample[i] - m_dPrevSample[i]));
+			}
+		}
 		m_dPrevSample = dSample;
 	}
 

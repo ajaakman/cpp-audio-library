@@ -10,12 +10,15 @@ namespace audio
 		m_dTime = dTime;
 	}
 
-	void MasterMixer::CalcSample(double& dSample)
+	void MasterMixer::CalcSample(std::array<double, CHANNELS> & dSample)
 	{
-		// Lerp the master amplitude before applying it to the final ouput to prevent audio clicks.
-		dSample *= Utilities::Lerp(m_dAmplitude, m_dAmpTarget, 0.0005, 0.0, 1.0);
-		// Hard clip final output.
-		dSample = Utilities::Clamp(dSample, -1.0, 1.0);
+		for (size_t i = 0; i < dSample.size(); ++i)
+		{
+			// Lerp the master amplitude before applying it to the final ouput to prevent audio clicks.
+			dSample[i] *= Utilities::Lerp(m_dAmplitude, m_dAmpTarget, 0.0005, 0.0, 1.0);
+			// Hard clip final output.
+			dSample[i] = Utilities::Clamp(dSample[i], -1.0, 1.0);
+		}
 	}
 
 	const bool MasterMixer::SetOutput(Component* const& newOutput)
@@ -28,7 +31,7 @@ namespace audio
 		return nullptr;
 	}
 
-	const double& MasterMixer::GetMasterOutput()
+	const std::array<double, CHANNELS> & MasterMixer::GetMasterOutput()
 	{
 		return FinalOutput();
 	}
