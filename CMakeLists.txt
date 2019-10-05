@@ -38,6 +38,8 @@ else ()
     target_link_libraries( AudioLib ${CMAKE_CURRENT_LIST_DIR}/deps/SDL2-2.0.10/lib/x86/SDL2.lib)
     target_link_libraries( AudioLib ${CMAKE_CURRENT_LIST_DIR}/deps/SDL2-2.0.10/lib/x86/SDL2main.lib)
 endif ()
+target_compile_features(AudioLib PRIVATE cxx_std_17)
+target_compile_features(Example PRIVATE cxx_std_17)
 
 include_directories(deps/SDL2-2.0.10/include)
 

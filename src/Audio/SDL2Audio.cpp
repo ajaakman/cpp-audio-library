@@ -110,10 +110,10 @@ namespace audio
 			auto out = masterMixer.GetMasterOutput();
 			for (unsigned j = 0; j < CHANNELS; j++)
 			{
-				m_Buffer[i + j] = Sint16(out[j] * 32767.0f);
+				m_Buffer[i + j] = static_cast<Sint16>(out[j] * 32767.0f);
 			}
 
-			m_dTime += 1.0 / (double)SAMPLERATE;
+			m_dTime += 1.0 / static_cast<double>(SAMPLERATE);
 
 			if (m_dTime > 50.0)
 			{

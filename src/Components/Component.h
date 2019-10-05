@@ -23,7 +23,7 @@ namespace audio
 		Component& operator=(const Component&) = delete;
 
 	protected:
-		static const double& SampleTime();
+		static const float SampleTime();
 	private:
 		// CalcSample() runs for every audio sample and should assign a new value to the dSample input parameter variable.
 		virtual void CalcSample(std::array<float, CHANNELS>& dSample) = 0;

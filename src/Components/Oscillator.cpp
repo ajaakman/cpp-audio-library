@@ -15,7 +15,7 @@ namespace audio
 
 	void Oscillator::CalcSample(std::array<float, CHANNELS> & dSample)
 	{
-		const float sine = sin(m_dFrequency * float(TWO_PI<double> * SampleTime()) + (m_dPhase * TWO_PI<float>));
+		const float sine = sin(m_dFrequency * TWO_PI<float> * SampleTime() + (m_dPhase * TWO_PI<float>));
 		float wave = 0.0f;
 		switch (m_Wave)
 		{
@@ -29,10 +29,10 @@ namespace audio
 			wave = asin(sine) * TWO_OVER_PI<float>;
 			break;
 		case audio::Oscillator::Saw:
-			wave = -2.0f / PI<float> * atan(1.0f / tan(m_dFrequency * float(SampleTime() * PI<double>) + (m_dPhase * PI<float>)));
+			wave = -2.0f / PI<float> * atan(1.0f / tan(m_dFrequency * SampleTime() * PI<float> + (m_dPhase * PI<float>)));
 			break;
 		case audio::Oscillator::Noise:
-			wave = 2.0f * ((float)rand() / (float)RAND_MAX) - 1.0f;
+			wave = 2.0f * (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) - 1.0f;
 			break;
 		default:
 			break;

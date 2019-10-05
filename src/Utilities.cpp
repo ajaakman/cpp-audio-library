@@ -1,6 +1,7 @@
 #include "./Utilities.h"
 
-namespace audio {
+namespace audio
+{
 	const float& Utilities::Clamp(const float& dValue, const float& dMin, const float& dMax) {
 		if (dValue < dMin) return dMin;
 		else if (dValue > dMax) return dMax;

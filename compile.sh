@@ -1,4 +1,4 @@
-emcc -std=c++14 \
+emcc -std=c++17 \
 "src/Utilities.cpp" \
 "src/API.cpp" \
 "src/Components/FilterLP.cpp" \
