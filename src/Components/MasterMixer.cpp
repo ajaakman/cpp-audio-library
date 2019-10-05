@@ -5,19 +5,19 @@
 namespace audio
 {
 	MasterMixer::MasterMixer(double* const& dTime)
-		: m_dAmpTarget(0.0), m_dAmplitude(0.0)
+		: m_dAmpTarget(0.0f), m_dAmplitude(0.0f)
 	{
 		m_dTime = dTime;
 	}
 
-	void MasterMixer::CalcSample(std::array<double, CHANNELS> & dSample)
+	void MasterMixer::CalcSample(std::array<float, CHANNELS> & dSample)
 	{
 		for (size_t i = 0; i < dSample.size(); ++i)
 		{
 			// Lerp the master amplitude before applying it to the final ouput to prevent audio clicks.
-			dSample[i] *= Utilities::Lerp(m_dAmplitude, m_dAmpTarget, 0.0005, 0.0, 1.0);
+			dSample[i] *= Utilities::Lerp(m_dAmplitude, m_dAmpTarget, 0.0005f, 0.0f, 1.0f);
 			// Hard clip final output.
-			dSample[i] = Utilities::Clamp(dSample[i], -1.0, 1.0);
+			dSample[i] = Utilities::Clamp(dSample[i], -1.0f, 1.0f);
 		}
 	}
 
@@ -31,17 +31,17 @@ namespace audio
 		return nullptr;
 	}
 
-	const std::array<double, CHANNELS> & MasterMixer::GetMasterOutput()
+	const std::array<float, CHANNELS> & MasterMixer::GetMasterOutput()
 	{
 		return FinalOutput();
 	}
 
-	void MasterMixer::SetAmplitude(const double& dNewAmplitude)
+	void MasterMixer::SetAmplitude(const float& dNewAmplitude)
 	{
-		m_dAmpTarget = Utilities::Clamp(dNewAmplitude, 0.0, 1.0);
+		m_dAmpTarget = Utilities::Clamp(dNewAmplitude, 0.0f, 1.0f);
 	}
 
-	const double& MasterMixer::GetAmplitude()
+	const float& MasterMixer::GetAmplitude()
 	{
 		return m_dAmpTarget;
 	}

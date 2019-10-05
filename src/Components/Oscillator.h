@@ -7,25 +7,25 @@ namespace audio
 	class Oscillator final : public Component
 	{
 	public:
-		Oscillator(const double& dFrequency, const double& dAmplitude);
+		Oscillator(const float& dFrequency, const float& dAmplitude);
 
 		enum Wave { Sine, Square, Triangle, Saw, Noise };
 
-		virtual void CalcSample(std::array<double, CHANNELS>& dSample) override;
+		virtual void CalcSample(std::array<float, CHANNELS>& dSample) override;
 
-		void SetAmplitude(const double& dNewAmplitude);
-		const double& GetAmplitude() const;
-		void SetFrequency(const double& dNewFrequency);
-		const double& GetFrequency() const;
-		void SetPhase(const double& dNewPhase);
-		const double& GetPhase() const;
+		void SetAmplitude(const float& dNewAmplitude);
+		const float& GetAmplitude() const;
+		void SetFrequency(const float& dNewFrequency);
+		const float& GetFrequency() const;
+		void SetPhase(const float& dNewPhase);
+		const float& GetPhase() const;
 		void SetWave(const Wave& newWave);
 		const Wave& GetWave() const;
 
 	private:
 		Wave m_Wave;
-		double m_dFrequency;
-		double m_dAmplitude;
-		double m_dPhase;
+		float m_dFrequency;
+		float m_dAmplitude;
+		float m_dPhase;
 	};
 }

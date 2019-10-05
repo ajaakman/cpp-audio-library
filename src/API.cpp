@@ -21,7 +21,7 @@ extern "C" {
 		return synth.InitAudio();
 	}
 
-	void MasterSetAmp(const double dNewAmplitude)
+	void MasterSetAmp(const float dNewAmplitude)
 	{
 		synth.LockAudioThread();
 		synth.masterMixer.SetAmplitude(dNewAmplitude);
@@ -37,10 +37,10 @@ extern "C" {
 		return masterMixer;
 	}
 
-	const double MasterGetAmp()
+	const float MasterGetAmp()
 	{
 		synth.LockAudioThread();
-		volatile double amplitude = synth.masterMixer.GetAmplitude();
+		volatile float amplitude = synth.masterMixer.GetAmplitude();
 		synth.UnlockAudioThread();
 
 		return amplitude;
@@ -73,52 +73,52 @@ extern "C" {
 
 	const intptr_t CompAddOsc()
 	{
-		return reinterpret_cast<intptr_t>(new Oscillator(0.0, 0.0));
+		return reinterpret_cast<intptr_t>(new Oscillator(0.0f, 0.0f));
 	}
 
-	void OscSetFreq(const intptr_t component, const double dNewFrequency)
+	void OscSetFreq(const intptr_t component, const float dNewFrequency)
 	{
 		synth.LockAudioThread();
 		reinterpret_cast<Oscillator*>(component)->SetFrequency(dNewFrequency);
 		synth.UnlockAudioThread();
 	}
 
-	const double OscGetFreq(const intptr_t component)
+	const float OscGetFreq(const intptr_t component)
 	{
 		synth.LockAudioThread();
-		volatile double freq = reinterpret_cast<Oscillator*>(component)->GetFrequency();
+		volatile float freq = reinterpret_cast<Oscillator*>(component)->GetFrequency();
 		synth.UnlockAudioThread();
 
 		return freq;
 	}
 
-	void OscSetAmp(const intptr_t component, const double dNewAmplitude)
+	void OscSetAmp(const intptr_t component, const float dNewAmplitude)
 	{
 		synth.LockAudioThread();
 		reinterpret_cast<Oscillator*>(component)->SetAmplitude(dNewAmplitude);
 		synth.UnlockAudioThread();
 	}
 
-	const double OscGetAmp(const intptr_t component)
+	const float OscGetAmp(const intptr_t component)
 	{
 		synth.LockAudioThread();
-		volatile double amp = reinterpret_cast<Oscillator*>(component)->GetAmplitude();
+		volatile float amp = reinterpret_cast<Oscillator*>(component)->GetAmplitude();
 		synth.UnlockAudioThread();
 
 		return amp;
 	}
 
-	void OscSetPhase(const intptr_t component, const double dNewPhase)
+	void OscSetPhase(const intptr_t component, const float dNewPhase)
 	{
 		synth.LockAudioThread();
 		reinterpret_cast<Oscillator*>(component)->SetPhase(dNewPhase);
 		synth.UnlockAudioThread();
 	}
 
-	const double OscGetPhase(const intptr_t component)
+	const float OscGetPhase(const intptr_t component)
 	{
 		synth.LockAudioThread();
-		volatile double phase = reinterpret_cast<Oscillator*>(component)->GetPhase();
+		volatile float phase = reinterpret_cast<Oscillator*>(component)->GetPhase();
 		synth.UnlockAudioThread();
 
 		return phase;
@@ -145,17 +145,17 @@ extern "C" {
 		return reinterpret_cast<intptr_t>(new FilterLP());
 	}
 
-	void LPSetCutoff(const intptr_t component, const double dNewCutoff)
+	void LPSetCutoff(const intptr_t component, const float dNewCutoff)
 	{
 		synth.LockAudioThread();
 		reinterpret_cast<FilterLP*>(component)->SetCutoff(dNewCutoff);
 		synth.UnlockAudioThread();
 	}
 
-	const double LPGetCutoff(const intptr_t component)
+	const float LPGetCutoff(const intptr_t component)
 	{
 		synth.LockAudioThread();
-		volatile double cutoff = reinterpret_cast<FilterLP*>(component)->GetCutoff();
+		volatile float cutoff = reinterpret_cast<FilterLP*>(component)->GetCutoff();
 		synth.UnlockAudioThread();
 
 		return cutoff;

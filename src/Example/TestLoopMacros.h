@@ -54,8 +54,8 @@ else if (command == #COMP"Set"#PARAM)																							\
 		try																														\
 		{																														\
 			string t = #TYPE;																									\
-			if (t == "double")																									\
-				val = (TYPE)stod(subcommand);																					\
+			if (t == "float")																									\
+				val = (TYPE)stof(subcommand);																					\
 			else if (t == "int")																								\
 				val = (TYPE)stoi(subcommand);																					\
 			else																												\

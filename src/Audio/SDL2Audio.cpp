@@ -3,7 +3,7 @@
 namespace audio
 {
 	SDL2Audio::SDL2Audio()
-		: masterMixer(&m_dTime), m_Device(NULL), m_dTime(0.0), m_Buffer()
+		: masterMixer(&m_dTime), m_Device(NULL), m_dTime(0.0f), m_Buffer()
 	{	}
 
 	SDL2Audio::~SDL2Audio()
@@ -110,10 +110,16 @@ namespace audio
 			auto out = masterMixer.GetMasterOutput();
 			for (unsigned j = 0; j < CHANNELS; j++)
 			{
-				m_Buffer[i + j] = Sint16(out[j] * 32767.0);
+				m_Buffer[i + j] = Sint16(out[j] * 32767.0f);
 			}
 
 			m_dTime += 1.0 / (double)SAMPLERATE;
+
+			if (m_dTime > 50.0)
+			{
+				double intpart;
+				m_dTime = modf(m_dTime, &intpart);			
+			}
 		}
 
 		SDL_memcpy(stream, &m_Buffer[0], streamLength);

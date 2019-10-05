@@ -9,16 +9,16 @@ namespace audio
 	public:
 		MasterMixer(double* const& dTime);
 
-		virtual void CalcSample(std::array<double, CHANNELS>& dSample) override;
+		virtual void CalcSample(std::array<float, CHANNELS>& dSample) override;
 		virtual const bool SetOutput(Component* const& newOutput) override;
 		virtual const Component* const GetOutput() const override;
-		const std::array<double, CHANNELS>& GetMasterOutput();
+		const std::array<float, CHANNELS>& GetMasterOutput();
 
-		void SetAmplitude(const double& dNewAmplitude);
-		const double& GetAmplitude();
+		void SetAmplitude(const float& dNewAmplitude);
+		const float& GetAmplitude();
 
 	private:
-		double m_dAmplitude;
-		double m_dAmpTarget;
+		float m_dAmplitude;
+		float m_dAmpTarget;
 	};
 }

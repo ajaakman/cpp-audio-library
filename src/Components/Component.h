@@ -26,16 +26,16 @@ namespace audio
 		static const double& SampleTime();
 	private:
 		// CalcSample() runs for every audio sample and should assign a new value to the dSample input parameter variable.
-		virtual void CalcSample(std::array<double, CHANNELS>& dSample) = 0;
+		virtual void CalcSample(std::array<float, CHANNELS>& dSample) = 0;
 
 		friend class MasterMixer;
 
-		const std::array<double, CHANNELS>& FinalOutput();
-		std::array<double, CHANNELS>& CombineInputs();
+		const std::array<float, CHANNELS>& FinalOutput();
+		std::array<float, CHANNELS>& CombineInputs();
 
 	private:
 		static double* m_dTime;
-		std::array<double, CHANNELS> m_OutSample;
+		std::array<float, CHANNELS> m_OutSample;
 
 		std::vector<Component*> m_Inputs;
 		Component* m_Output;

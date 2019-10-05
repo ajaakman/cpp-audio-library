@@ -165,19 +165,19 @@ void TestLoop(std::map<std::string, intptr_t>& components)
 		}
 		else if (command == "MasterSetAmp")
 		{
-			cout << "Enter New Amplitude (double, 0.0 - 1.0)." << endl;
+			cout << "Enter New Amplitude (float, 0.0f - 1.0f)." << endl;
 			cin >> command;
 
 			if (command == "exit") break;
 
 			try
 			{
-				MasterSetAmp(stod(command));
+				MasterSetAmp(stof(command));
 				cout << "New Amplitude: " << MasterGetAmp() << "." << endl;
 			}
 			catch (invalid_argument)
 			{
-				cout << "Invalid Input Value. Expected Double." << endl;
+				cout << "Invalid Input Value. Expected float." << endl;
 			}
 		}
 		CREATOR(Osc, Oscillator)
@@ -189,11 +189,11 @@ void TestLoop(std::map<std::string, intptr_t>& components)
 		GETTER(Osc, Wave, Oscillator, Wave)
 		GETTER(LP, Cutoff, LP Filter, Cutoff Frequency)
 
-		SETTER(Osc, Freq, Oscillator, Frequency, double, (double, 0.0 - 20000.0))
-		SETTER(Osc, Phase, Oscillator, Phase, double, (double, 0.0 - 1.0))
-		SETTER(Osc, Amp, Oscillator, Amplitude, double, (double, 0.0 - 1.0))
+		SETTER(Osc, Freq, Oscillator, Frequency, float, (float, 0.0f - 20000.0f))
+		SETTER(Osc, Phase, Oscillator, Phase, float, (float, 0.0f - 1.0f))
+		SETTER(Osc, Amp, Oscillator, Amplitude, float, (float, 0.0f - 1.0f))
 		SETTER(Osc, Wave, Oscillator, Wave, int, (int, 0 - 4 : Sine, Square, Triangle, Saw, Noise))
-		SETTER(LP, Cutoff, LP Filter, Cutoff Frequency, double, (double, 1.0 - 20000.0))
+		SETTER(LP, Cutoff, LP Filter, Cutoff Frequency, float, (float, 1.0f - 20000.0f))
 		else
 		{
 			cout << "Invalid Command. ";

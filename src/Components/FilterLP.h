@@ -8,12 +8,12 @@ namespace audio
 	{
 	public:
 		FilterLP();
-		virtual void CalcSample(std::array<double, CHANNELS>& dSample) override;
+		virtual void CalcSample(std::array<float, CHANNELS>& dSample) override;
 
-		void SetCutoff(const double& dNewCutoff);
-		const double& GetCutoff() const;
+		void SetCutoff(const float& dNewCutoff);
+		const float& GetCutoff() const;
 	private:
-		std::array<double, CHANNELS> m_dPrevSample;
-		double m_dCutoff;
+		std::array<float, CHANNELS> m_dPrevSample;
+		float m_dCutoff;
 	};
 }

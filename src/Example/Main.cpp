@@ -10,7 +10,7 @@ int main(int argc, char** argv)
 	map<string, intptr_t> components;
 
 	InitAudio();
-	MasterSetAmp(0.02);
+	MasterSetAmp(0.02f);
 
 	components["osc1"] = CompAddOsc();
 	components["osc2"] = CompAddOsc();
@@ -18,25 +18,25 @@ int main(int argc, char** argv)
 	components["lp"] = CompAddLP();
 
 	CompSetOut(components["osc1"], components["lp"]);
-	OscSetFreq(components["osc1"], 220.0);
-	OscSetAmp(components["osc1"], 0.1);
-	OscSetPhase(components["osc1"], 0.0);
+	OscSetFreq(components["osc1"], 220.0f);
+	OscSetAmp(components["osc1"], 0.1f);
+	OscSetPhase(components["osc1"], 0.0f);
 	OscSetWave(components["osc1"], 3);
 
 	CompSetOut(components["osc2"], components["lp"]);
-	OscSetFreq(components["osc2"], 440.0);
-	OscSetAmp(components["osc2"], 0.3);
-	OscSetPhase(components["osc2"], 0.0);
+	OscSetFreq(components["osc2"], 440.0f);
+	OscSetAmp(components["osc2"], 0.3f);
+	OscSetPhase(components["osc2"], 0.0f);
 	OscSetWave(components["osc2"], 3);
 
 	CompSetOut(components["osc3"], components["osc1"]);
-	OscSetFreq(components["osc3"], 880.0);
-	OscSetAmp(components["osc3"], 1.0);
-	OscSetPhase(components["osc3"], 0.0);
+	OscSetFreq(components["osc3"], 880.0f);
+	OscSetAmp(components["osc3"], 1.0f);
+	OscSetPhase(components["osc3"], 0.0f);
 	OscSetWave(components["osc3"], 3);
 
 	CompSetOut(components["lp"], MasterComp());
-	LPSetCutoff(components["lp"], 10000.0);
+	LPSetCutoff(components["lp"], 10000.0f);
 
 	TestLoop(components);
 
