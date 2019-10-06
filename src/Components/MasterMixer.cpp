@@ -30,13 +30,13 @@ namespace audio
 		}
 		else
 		{
-			if (!m_bClipTimer[channel])
+			if (m_bClipTimer[channel])
 			{
-				m_bChannelClip[channel] = value;
+				--m_bClipTimer[channel];
 			}
 			else
 			{
-				--m_bClipTimer[channel];
+				m_bChannelClip[channel] = value;
 			}
 		}
 	}

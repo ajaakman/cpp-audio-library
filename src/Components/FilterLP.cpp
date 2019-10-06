@@ -19,7 +19,7 @@ namespace audio {
 			{
 				dSample[i] = m_dPrevSample[i]
 					+ (1.0f / SAMPLE_RATE<float> / (1.0f / (m_dCutoff * TWO_PI<float>) + 1.0f / SAMPLE_RATE<float>)
-						* (dSample[i] - m_dPrevSample[i]));
+					* (dSample[i] - m_dPrevSample[i]));
 			}
 		}
 		m_dPrevSample = dSample;

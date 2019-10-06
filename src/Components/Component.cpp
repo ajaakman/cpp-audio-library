@@ -12,10 +12,14 @@ namespace audio
 	{
 		// Remove component from output.
 		if (m_Output != nullptr)
+		{
 			m_Output->RemoveInput(this);
+		}
 		// Remove component from inputs.
 		for (const auto& input : m_Inputs)
+		{
 			input->SetOutput(nullptr);
+		}
 	}
 
 	const bool Component::AddInput(Component* const& input)
@@ -24,7 +28,9 @@ namespace audio
 		if (input == this) return false;
 		// Prevent same input from being added multiple times.
 		for (const auto& in : m_Inputs)
+		{
 			if (in == input) return false;
+		}
 
 		m_Inputs.push_back(input);
 		return true;
@@ -46,13 +52,17 @@ namespace audio
 	const bool Component::SetOutput(Component* const& newOuput)
 	{
 		// Must not output in to self.
-		if (newOuput == this) return false;
+		if (newOuput == this) return false;		
 		// Remove component from old output.
 		if (m_Output != nullptr)
+		{
 			m_Output->RemoveInput(this);
+		}
 		// Add component to new output.
 		if (newOuput != nullptr)
+		{
 			newOuput->AddInput(this);
+		}
 
 		m_Output = newOuput;
 		return true;
