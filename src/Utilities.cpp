@@ -2,12 +2,6 @@
 
 namespace audio
 {
-	const float& Utilities::Clamp(const float& dValue, const float& dMin, const float& dMax) {
-		if (dValue < dMin) return dMin;
-		else if (dValue > dMax) return dMax;
-		return dValue;
-	};
-
 	const float& Utilities::Lerp(float& dValue, const float& dTarget, const float& dSpeed, const float& dMin, const float& dMax)
 	{
 		// If the current value is not similar to the target value, add or subtract the factor.

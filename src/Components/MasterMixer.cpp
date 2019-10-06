@@ -17,7 +17,7 @@ namespace audio
 			// Lerp the master amplitude before applying it to the final ouput to prevent audio clicks.
 			dSample[i] *= Utilities::Lerp(m_dAmplitude, m_dAmpTarget, 0.0005f, 0.0f, 1.0f);
 			// Hard clip final output.
-			dSample[i] = Utilities::Clamp(dSample[i], -1.0f, 1.0f);
+			dSample[i] = std::clamp(dSample[i], -1.0f, 1.0f);
 		}
 	}
 
@@ -38,7 +38,7 @@ namespace audio
 
 	void MasterMixer::SetAmplitude(const float& dNewAmplitude)
 	{
-		m_dAmpTarget = Utilities::Clamp(dNewAmplitude, 0.0f, 1.0f);
+		m_dAmpTarget = std::clamp(dNewAmplitude, 0.0f, 1.0f);
 	}
 
 	const float& MasterMixer::GetAmplitude()

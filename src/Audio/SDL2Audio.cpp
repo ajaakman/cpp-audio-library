@@ -115,7 +115,7 @@ namespace audio
 
 			m_dTime += 1.0 / static_cast<double>(SAMPLERATE);
 
-			if (m_dTime > 50.0)
+			if (m_dTime > 100.0)
 			{
 				double intpart;
 				m_dTime = modf(m_dTime, &intpart);			

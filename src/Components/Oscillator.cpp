@@ -47,7 +47,7 @@ namespace audio
 
 	void Oscillator::SetAmplitude(const float& dNewAmplitude)
 	{
-		m_dAmplitude = Utilities::Clamp(dNewAmplitude, 0.0f, 1.0f);
+		m_dAmplitude = std::clamp(dNewAmplitude, 0.0f, 1.0f);
 	}
 
 	const float& Oscillator::GetAmplitude() const
@@ -57,7 +57,7 @@ namespace audio
 
 	void Oscillator::SetFrequency(const float& dNewFrequency)
 	{
-		m_dFrequency = Utilities::Clamp(dNewFrequency, 0.0f, 20000.0f);
+		m_dFrequency = roundf(std::clamp(dNewFrequency, 0.0f, 20000.0f) * 100.0f) / 100.0f;
 	}
 
 	const float& Oscillator::GetFrequency() const

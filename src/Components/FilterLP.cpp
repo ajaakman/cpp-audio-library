@@ -27,7 +27,7 @@ namespace audio {
 
 	void FilterLP::SetCutoff(const float& dNewCutoff)
 	{
-		m_dCutoff = Utilities::Clamp(dNewCutoff, 1.0f, 20000.0f);
+		m_dCutoff = std::clamp(dNewCutoff, 1.0f, 20000.0f);
 	}
 
 	const float& FilterLP::GetCutoff() const
