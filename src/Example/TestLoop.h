@@ -25,6 +25,7 @@ void TestLoop(std::map<std::string, intptr_t>& components)
 		else if (command == "commands")
 		{
 			cout << "--Valid Commands:--\n";
+			cout << "IsOutClipping\n";
 			cout << "CompDelete\n";
 			cout << "CompGetIn\n";
 			cout << "CompGetOut\n";
@@ -56,6 +57,13 @@ void TestLoop(std::map<std::string, intptr_t>& components)
 				cout << component.first << "\n";
 
 			cout << "--End--" << endl;
+		}
+		else if (command == "IsOutClipping")
+		{
+			if (IsOutClipping())
+				cout << "Yes" << endl;
+			else
+				cout << "No" << endl;
 		}
 		else if (command == "CompDelete")
 		{

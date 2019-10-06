@@ -7,6 +7,7 @@
 // Functions called here must lock the audio thread when accessing shared data.
 
 const int InitAudio();
+const bool IsOutClipping();
 
 const intptr_t MasterComp();
 void MasterSetAmp(const float dNewAmplitude);

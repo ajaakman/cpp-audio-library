@@ -21,5 +21,5 @@ namespace audio
 	constexpr T TWO_OVER_PI = T(0.636619772367581343076L);
 
 	template<typename T>
-	constexpr T OSC_TUNE_ACC = T(100);
+	constexpr T OSC_TUNE_ACC = T(10);
 }

@@ -28,6 +28,18 @@ extern "C" {
 		synth.UnlockAudioThread();
 	}
 
+	const bool IsOutClipping()
+	{
+		synth.LockAudioThread();
+		volatile bool result = false;
+		for (const auto& channel : synth.masterMixer.IsOutClipping())
+		{
+			if (channel) result = true;
+		}
+		synth.UnlockAudioThread();
+		return result;
+	}
+
 	const intptr_t MasterComp()
 	{
 		synth.LockAudioThread();
