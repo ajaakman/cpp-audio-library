@@ -28,7 +28,7 @@ namespace audio
 
 	private:
 		SDL_AudioDeviceID m_Device;
-		std::array<Sint16, CHANNELS * BUFFERSIZE> m_Buffer;
+		std::array<float, CHANNELS<size_t>* BUFFERSIZE<size_t>> m_Buffer;
 
 		double m_dTime;
 	};

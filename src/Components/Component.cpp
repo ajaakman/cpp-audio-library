@@ -73,7 +73,7 @@ namespace audio
 		return static_cast<float>(*m_dTime);
 	}
 
-	std::array<float, CHANNELS>& Component::CombineInputs()
+	std::array<float, CHANNELS<size_t>>& Component::CombineInputs()
 	{
 		for (auto& sample : m_OutSample)
 		{
@@ -92,7 +92,7 @@ namespace audio
 		return m_OutSample;
 	}
 
-	const std::array<float, CHANNELS>& Component::FinalOutput()
+	const std::array<float, CHANNELS<size_t>>& Component::FinalOutput()
 	{
 		CombineInputs();
 		CalcSample(m_OutSample);

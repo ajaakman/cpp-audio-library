@@ -11,7 +11,7 @@ namespace audio
 
 		enum Wave { Sine, Square, Triangle, Saw, Noise };
 
-		virtual void CalcSample(std::array<float, CHANNELS>& dSample) override;
+		virtual void CalcSample(std::array<float, CHANNELS<size_t>>& dSample) override;
 
 		void SetAmplitude(const float& dNewAmplitude);
 		const float& GetAmplitude() const;
@@ -21,6 +21,8 @@ namespace audio
 		const float& GetPhase() const;
 		void SetWave(const Wave& newWave);
 		const Wave& GetWave() const;
+	private:
+		const float SineWave() const;
 
 	private:
 		Wave m_Wave;

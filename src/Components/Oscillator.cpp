@@ -13,20 +13,19 @@ namespace audio
 		SetAmplitude(dAmplitude);
 	}
 
-	void Oscillator::CalcSample(std::array<float, CHANNELS> & dSample)
-	{
-		const float sine = sin(m_dFrequency * TWO_PI<float> * SampleTime() + (m_dPhase * TWO_PI<float>));
+	void Oscillator::CalcSample(std::array<float, CHANNELS<size_t>> & dSample)
+	{		
 		float wave = 0.0f;
 		switch (m_Wave)
 		{
 		case audio::Oscillator::Sine:
-			wave = sine;
+			wave = SineWave();
 			break;
 		case audio::Oscillator::Square:
-			wave = signbit(sine);
+			wave = signbit(SineWave());
 			break;
 		case audio::Oscillator::Triangle:
-			wave = asin(sine) * TWO_OVER_PI<float>;
+			wave = asin(SineWave()) * TWO_OVER_PI<float>;
 			break;
 		case audio::Oscillator::Saw:
 			wave = -2.0f / PI<float> * atan(1.0f / tan(m_dFrequency * SampleTime() * PI<float> + (m_dPhase * PI<float>)));
@@ -43,6 +42,11 @@ namespace audio
 			dSample[i] += wave;
 			dSample[i] *= m_dAmplitude;
 		}
+	}
+
+	const float Oscillator::SineWave() const
+	{
+		return sin(m_dFrequency * TWO_PI<float> * SampleTime() + (m_dPhase * TWO_PI<float>));
 	}
 
 	void Oscillator::SetAmplitude(const float& dNewAmplitude)
@@ -81,7 +85,8 @@ namespace audio
 		m_Wave = newWave;
 	}
 
-	const Oscillator::Wave& Oscillator::GetWave() const {
+	const Oscillator::Wave& Oscillator::GetWave() const 
+	{
 		return m_Wave;
 	}
 }

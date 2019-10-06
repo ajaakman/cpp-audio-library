@@ -11,14 +11,14 @@ namespace audio {
 		}
 	}
 
-	void FilterLP::CalcSample(std::array<float, CHANNELS>& dSample)
+	void FilterLP::CalcSample(std::array<float, CHANNELS<size_t>>& dSample)
 	{
 		for (size_t i = 0; i < dSample.size(); i++)
 		{
 			for (unsigned j = 0; j < 4; ++j)
 			{
 				dSample[i] = m_dPrevSample[i]
-					+ (1.0f / static_cast<float>(SAMPLERATE) / (1.0f / (m_dCutoff * TWO_PI<float>) + 1.0f / static_cast<float>(SAMPLERATE))
+					+ (1.0f / SAMPLERATE<float> / (1.0f / (m_dCutoff * TWO_PI<float>) + 1.0f / SAMPLERATE<float>)
 						* (dSample[i] - m_dPrevSample[i]));
 			}
 		}

@@ -26,10 +26,10 @@ namespace audio
 		SDL_memset(&specin, 0, sizeof(specin));
 		SDL_memset(&specout, 0, sizeof(specout));
 
-		specin.channels = CHANNELS;
-		specin.freq = SAMPLERATE;
-		specin.format = AUDIO_S16SYS;
-		specin.samples = BUFFERSIZE;
+		specin.channels = CHANNELS<Uint8>;
+		specin.freq = SAMPLERATE<int>;
+		specin.format = AUDIO_F32;
+		specin.samples = BUFFERSIZE<Uint16>;
 		specin.userdata = this;
 		specin.callback = ForwardAudioCallback;
 
@@ -105,15 +105,15 @@ namespace audio
 
 	void SDL2Audio::AudioCallback(Uint8* const& stream, const int& streamLength)
 	{
-		for (size_t i = 0; i < m_Buffer.size(); i += CHANNELS)
+		for (size_t i = 0; i < m_Buffer.size(); i += CHANNELS<size_t>)
 		{
 			auto out = masterMixer.GetMasterOutput();
-			for (unsigned j = 0; j < CHANNELS; j++)
+			for (size_t j = 0; j < CHANNELS<size_t>; j++)
 			{
-				m_Buffer[i + j] = static_cast<Sint16>(out[j] * 32767.0f);
+				m_Buffer[i + j] = out[j];
 			}
 
-			m_dTime += 1.0 / static_cast<double>(SAMPLERATE);
+			m_dTime += 1.0 / SAMPLERATE<double>;
 
 			if (m_dTime > 100.0)
 			{
