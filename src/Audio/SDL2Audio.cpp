@@ -27,9 +27,9 @@ namespace audio
 		SDL_memset(&specout, 0, sizeof(specout));
 
 		specin.channels = CHANNELS<Uint8>;
-		specin.freq = SAMPLERATE<int>;
+		specin.freq = SAMPLE_RATE<int>;
 		specin.format = AUDIO_F32;
-		specin.samples = BUFFERSIZE<Uint16>;
+		specin.samples = BUFFER_SIZE<Uint16>;
 		specin.userdata = this;
 		specin.callback = ForwardAudioCallback;
 
@@ -113,9 +113,9 @@ namespace audio
 				m_Buffer[i + j] = out[j];
 			}
 
-			m_dTime += 1.0 / SAMPLERATE<double>;
+			m_dTime += 1.0 / SAMPLE_RATE<double>;
 
-			if (m_dTime > 100.0)
+			if (m_dTime > OSC_TUNE_ACC<double>)
 			{
 				double intpart;
 				m_dTime = modf(m_dTime, &intpart);			

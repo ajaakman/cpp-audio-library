@@ -61,7 +61,7 @@ namespace audio
 
 	void Oscillator::SetFrequency(const float& dNewFrequency)
 	{
-		m_dFrequency = roundf(std::clamp(dNewFrequency, 0.0f, 20000.0f) * 100.0f) / 100.0f;
+		m_dFrequency = roundf(std::clamp(dNewFrequency, 0.0f, 20000.0f) * OSC_TUNE_ACC<float>) / OSC_TUNE_ACC<float>;
 	}
 
 	const float& Oscillator::GetFrequency() const

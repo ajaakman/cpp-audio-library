@@ -18,7 +18,7 @@ namespace audio {
 			for (unsigned j = 0; j < 4; ++j)
 			{
 				dSample[i] = m_dPrevSample[i]
-					+ (1.0f / SAMPLERATE<float> / (1.0f / (m_dCutoff * TWO_PI<float>) + 1.0f / SAMPLERATE<float>)
+					+ (1.0f / SAMPLE_RATE<float> / (1.0f / (m_dCutoff * TWO_PI<float>) + 1.0f / SAMPLE_RATE<float>)
 						* (dSample[i] - m_dPrevSample[i]));
 			}
 		}
