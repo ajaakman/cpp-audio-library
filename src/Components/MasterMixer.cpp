@@ -1,6 +1,7 @@
 #include "./MasterMixer.h"
 
 #include "../Utilities.h"
+#include "../API.h"
 
 namespace audio
 {
@@ -26,7 +27,11 @@ namespace audio
 		if (value)
 		{
 			m_bClipTimer[channel] = SAMPLE_RATE<unsigned>;
-			m_bChannelClip[channel] = value;
+			if (!m_bChannelClip[channel])
+			{
+				m_bChannelClip[channel] = value;
+				ClipCallback(channel, true);
+			}
 		}
 		else
 		{
@@ -36,7 +41,11 @@ namespace audio
 			}
 			else
 			{
-				m_bChannelClip[channel] = value;
+				if (m_bChannelClip[channel])
+				{
+					m_bChannelClip[channel] = value;
+					ClipCallback(channel, false);				
+				}
 			}
 		}
 	}

@@ -8,6 +8,7 @@
 
 const int InitAudio();
 const bool IsOutClipping();
+void ClipCallback(const size_t channel, const bool status);
 
 const intptr_t MasterComp();
 void MasterSetAmp(const float dNewAmplitude);

@@ -40,6 +40,13 @@ extern "C" {
 		return result;
 	}
 
+	void ClipCallback(const size_t channel, const bool status)
+	{
+		synth.LockAudioThread();
+		// std::cout << channel << " " << status << std::endl; // TODO. Finish Callback.
+		synth.UnlockAudioThread();
+	}
+
 	const intptr_t MasterComp()
 	{
 		synth.LockAudioThread();
