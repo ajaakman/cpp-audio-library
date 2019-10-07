@@ -13,7 +13,7 @@ namespace audio
 	{
 	public:
 		SDL2Audio();
-		~SDL2Audio();
+		~SDL2Audio() override;
 		SDL2Audio(const SDL2Audio&) = delete;
 		SDL2Audio(SDL2Audio&&) = delete;
 		SDL2Audio& operator=(const SDL2Audio&) = delete;

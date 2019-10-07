@@ -8,7 +8,7 @@ namespace audio
 	{
 	public:
 		Oscillator();
-		~Oscillator() = default;
+		~Oscillator() override = default;
 		Oscillator(const Oscillator&) = delete;
 		Oscillator(Oscillator&&) = delete;
 		Oscillator& operator=(const Oscillator&) = delete;
