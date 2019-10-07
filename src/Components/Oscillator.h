@@ -7,7 +7,12 @@ namespace audio
 	class Oscillator final : public Component
 	{
 	public:
-		Oscillator(const float& dFrequency, const float& dAmplitude);
+		Oscillator();
+		~Oscillator() = default;
+		Oscillator(const Oscillator&) = delete;
+		Oscillator(Oscillator&&) = delete;
+		Oscillator& operator=(const Oscillator&) = delete;
+		Oscillator& operator=(Oscillator&&) = delete;
 
 		enum Wave { Sine, Square, Triangle, Saw, Noise };
 

@@ -8,6 +8,11 @@ namespace audio
 	{
 	public:
 		MasterMixer(double* const& dTime);
+		~MasterMixer() = default;
+		MasterMixer(const MasterMixer&) = delete;
+		MasterMixer(MasterMixer&&) = delete;
+		MasterMixer& operator=(const MasterMixer&) = delete;
+		MasterMixer& operator=(MasterMixer&&) = delete;
 
 		virtual void CalcSample(std::array<float, CHANNELS<size_t>>& dSample) override;
 		virtual const bool SetOutput(Component* const& newOutput) override;

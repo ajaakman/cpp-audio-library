@@ -6,12 +6,9 @@
 
 namespace audio
 {
-	Oscillator::Oscillator(const float& dFrequency, const float& dAmplitude)
+	Oscillator::Oscillator()
 		: m_dFrequency(0.0f), m_dAmplitude(0.0f), m_dPhase(0.0f), m_Wave(Sine)
-	{
-		SetFrequency(dFrequency);
-		SetAmplitude(dAmplitude);
-	}
+	{}
 
 	void Oscillator::CalcSample(std::array<float, CHANNELS<size_t>> & dSample)
 	{		

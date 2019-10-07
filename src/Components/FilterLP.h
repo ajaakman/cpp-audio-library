@@ -8,6 +8,12 @@ namespace audio
 	{
 	public:
 		FilterLP();
+		~FilterLP() = default;
+		FilterLP(const FilterLP&) = delete;
+		FilterLP(FilterLP&&) = delete;
+		FilterLP& operator=(const FilterLP&) = delete;
+		FilterLP& operator=(FilterLP&&) = delete;
+
 		virtual void CalcSample(std::array<float, CHANNELS<size_t>>& dSample) override;
 
 		void SetCutoff(const float& dNewCutoff);

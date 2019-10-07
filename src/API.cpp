@@ -42,9 +42,7 @@ extern "C" {
 
 	void ClipCallback(const size_t channel, const bool status)
 	{
-		synth.LockAudioThread();
 		// std::cout << channel << " " << status << std::endl; // TODO. Finish Callback.
-		synth.UnlockAudioThread();
 	}
 
 	const intptr_t MasterComp()
@@ -92,7 +90,7 @@ extern "C" {
 
 	const intptr_t CompAddOsc()
 	{
-		return reinterpret_cast<intptr_t>(new Oscillator(0.0f, 0.0f));
+		return reinterpret_cast<intptr_t>(new Oscillator);
 	}
 
 	void OscSetFreq(const intptr_t component, const float dNewFrequency)

@@ -12,6 +12,10 @@ namespace audio
 	public:
 		Component();
 		virtual ~Component();
+		Component(const Component&) = delete; // TODO
+		Component(Component&&) = delete;
+		Component& operator=(const Component&) = delete;
+		Component& operator=(Component&&) = delete;
 
 		virtual const bool AddInput(Component* const& input);
 		virtual const bool RemoveInput(Component* const& input);
@@ -19,8 +23,6 @@ namespace audio
 		virtual const std::vector<Component*>& GetInputs() const;
 		virtual const Component* const GetOutput() const;
 
-		Component(const Component&) = delete; // TODO
-		Component& operator=(const Component&) = delete;
 
 	protected:
 		static const float SampleTime();

@@ -13,7 +13,11 @@ namespace audio
 	{
 	public:
 		SDL2Audio();
-		virtual ~SDL2Audio() override;
+		~SDL2Audio();
+		SDL2Audio(const SDL2Audio&) = delete;
+		SDL2Audio(SDL2Audio&&) = delete;
+		SDL2Audio& operator=(const SDL2Audio&) = delete;
+		SDL2Audio& operator=(SDL2Audio&&) = delete;
 
 		virtual const int InitAudio() override;
 		virtual void LockAudioThread() override;
