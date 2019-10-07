@@ -8,7 +8,7 @@ namespace audio
 	{
 	public:
 		MasterMixer(double* const& dTime);
-		~MasterMixer() override = default;
+		~MasterMixer() = default;
 		MasterMixer(const MasterMixer&) = delete;
 		MasterMixer(MasterMixer&&) = delete;
 		MasterMixer& operator=(const MasterMixer&) = delete;

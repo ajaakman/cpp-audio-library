@@ -8,7 +8,7 @@ namespace audio
 	{
 	public:
 		FilterLP();
-		~FilterLP() override = default;
+		~FilterLP() = default;
 		FilterLP(const FilterLP&) = delete;
 		FilterLP(FilterLP&&) = delete;
 		FilterLP& operator=(const FilterLP&) = delete;
