@@ -1,50 +1,57 @@
 #include "../API.h"
-#include "./TestLoop.h"
+//#include "./TestLoop.h"
 
 #include <map>
+#include <iostream>
+#include <memory>
 
 int main(int argc, char** argv)
 {
 	using namespace std;
+	using namespace audio;
 
-	map<string, intptr_t> components;
+	map<string, unique_ptr<Component>> components;
 
-	InitAudio();
-	MasterSetAmp(0.02f);
+#ifdef USING_SDL2
+	unique_ptr<audio::SDL2Audio> synth = make_unique<audio::SDL2Audio>();
+#endif
 
-	components["osc1"] = CompAddOsc();
-	components["osc2"] = CompAddOsc();
-	components["osc3"] = CompAddOsc();
-	components["lp"] = CompAddLP();
+	synth->InitAudio();
+	synth->masterMixer.SetAmplitude(0.02f);
 
-	CompSetOut(components["osc1"], components["lp"]);
-	OscSetFreq(components["osc1"], 220.0f);
-	OscSetAmp(components["osc1"], 0.1f);
-	OscSetPhase(components["osc1"], 0.0f);
-	OscSetWave(components["osc1"], 3);
+	components["osc1"] = make_unique<Oscillator>();
+	components["osc2"] = make_unique<Oscillator>();
+	components["osc3"] = make_unique<Oscillator>();
+	components["lp"] = make_unique<FilterLP>();
 
-	CompSetOut(components["osc2"], components["lp"]);
-	OscSetFreq(components["osc2"], 440.0f);
-	OscSetAmp(components["osc2"], 0.3f);
-	OscSetPhase(components["osc2"], 0.0f);
-	OscSetWave(components["osc2"], 3);
+	components["osc1"]->SetOutput(components["lp"].get());
+	dynamic_cast<Oscillator*>(components["osc1"].get())->SetFrequency(220.0f);
+	dynamic_cast<Oscillator*>(components["osc1"].get())->SetAmplitude(0.1f);
+	dynamic_cast<Oscillator*>(components["osc1"].get())->SetPhase(0.0f);
+	dynamic_cast<Oscillator*>(components["osc1"].get())->SetWave(Oscillator::Wave::Saw);
 
-	CompSetOut(components["osc3"], components["osc1"]);
-	OscSetFreq(components["osc3"], 880.0f);
-	OscSetAmp(components["osc3"], 1.0f);
-	OscSetPhase(components["osc3"], 0.0f);
-	OscSetWave(components["osc3"], 3);
+	components["osc2"]->SetOutput(components["lp"].get());
+	dynamic_cast<Oscillator*>(components["osc2"].get())->SetFrequency(440.0f);
+	dynamic_cast<Oscillator*>(components["osc2"].get())->SetAmplitude(0.3f);
+	dynamic_cast<Oscillator*>(components["osc2"].get())->SetPhase(0.0f);
+	dynamic_cast<Oscillator*>(components["osc2"].get())->SetWave(Oscillator::Wave::Saw);
 
-	CompSetOut(components["lp"], MasterComp());
-	LPSetCutoff(components["lp"], 10000.0f);
-
-	TestLoop(components);
+	components["osc3"]->SetOutput(components["lp"].get());
+	dynamic_cast<Oscillator*>(components["osc3"].get())->SetFrequency(880.0f);
+	dynamic_cast<Oscillator*>(components["osc3"].get())->SetAmplitude(1.0f);
+	dynamic_cast<Oscillator*>(components["osc3"].get())->SetPhase(0.0f);
+	dynamic_cast<Oscillator*>(components["osc3"].get())->SetWave(Oscillator::Wave::Saw);
+	
+	components["lp"]->SetOutput(reinterpret_cast<Component*>(&synth->masterMixer));
+	dynamic_cast<FilterLP*>(components["lp"].get())->SetCutoff(10000.0f);
+	
+	std::cin.get();//TestLoop(components);
 
 	for (const auto& component : components)
-		CompSetOut(component.second, NULL);
+		component.second->SetOutput(nullptr);
 
-	for (const auto& component : components)
-		CompDelete(component.second);
+	for (auto itr = components.begin(); itr != components.end(); ++itr)
+		components.erase(itr);
 
 	return 0;
 }

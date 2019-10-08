@@ -50,7 +50,7 @@ namespace audio
 		}
 	}
 
-	const bool MasterMixer::SetOutput(Component* const& newOutput)
+	const bool MasterMixer::SetOutput(Component* const newOutput)
 	{
 		return false;
 	}
@@ -65,7 +65,7 @@ namespace audio
 		return FinalOutput();
 	}
 
-	const std::array<bool, CHANNELS<size_t>>& MasterMixer::IsOutClipping()
+	const std::array<std::atomic<bool>, CHANNELS<size_t>>& MasterMixer::IsOutClipping()
 	{
 		return m_bChannelClip;
 	}
@@ -75,7 +75,7 @@ namespace audio
 		m_dAmpTarget = std::clamp(dNewAmplitude, 0.0f, 1.0f);
 	}
 
-	const float& MasterMixer::GetAmplitude()
+	const float MasterMixer::GetAmplitude()
 	{
 		return m_dAmpTarget;
 	}

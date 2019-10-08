@@ -1,43 +1,61 @@
 #pragma once
 
-#include <cstdint>
-#include <vector>
+#define USING_SDL2
 
-// Functions called here must lock the audio thread when accessing shared data.
-
-#ifdef EMSCRIPTEN
-extern "C" {
+#ifdef USING_SDL2
+#include "./Audio/SDL2Audio.h"
 #endif
 
-	const int InitAudio();
-	const bool IsOutClipping();
-	void ClipCallback(const size_t channel, const bool status);
+#include "./Components/Component.h"
+#include "./Components/FilterLP.h"
+#include "./Components/Oscillator.h"
 
-	const intptr_t MasterComp();
-	void MasterSetAmp(const float dNewAmplitude);
-	const float MasterGetAmp();
-
-	void CompDelete(const intptr_t component);
-	const bool CompSetOut(const intptr_t component, const intptr_t output);
-
-	const intptr_t CompGetOut(const intptr_t component);
-
-	const intptr_t CompAddOsc();
-	void OscSetFreq(const intptr_t component, const float dNewFreq);
-	const float OscGetFreq(const intptr_t component);
-	void OscSetAmp(const intptr_t component, const float nNewAmplitude);
-	const float OscGetAmp(const intptr_t component);
-	void OscSetPhase(const intptr_t component, const float nNewPhase);
-	const float OscGetPhase(const intptr_t component);
-	void OscSetWave(const intptr_t component, const int nNewWave);
-	const int OscGetWave(const intptr_t component);
-
-	const intptr_t CompAddLP();
-	void LPSetCutoff(const intptr_t component, const float dNewCutoff);
-	const float LPGetCutoff(const intptr_t component);
-
-#ifdef EMSCRIPTEN
+namespace audio {
+	void ClipCallback(const size_t channel, const bool status); // TODO.
 }
-#endif
 
-const std::vector<intptr_t> CompGetIn(const intptr_t component);
+#ifdef EMSCRIPTEN
+
+#include <emscripten/bind.h>
+#include <cstdint>
+
+class Master {
+public:
+	Master() = default;
+	const int InitAudio();
+	void SetAmp(const float new_amp);
+	const float GetAmp();
+	intptr_t Get();
+private:
+#ifdef USING_SDL2
+	audio::SDL2Audio synth;
+#endif
+};
+
+class LP {
+public:
+	LP();
+	void SetCutoff(const float new_freq);
+	const float GetCutoff();
+	void SetOut(intptr_t new_out);
+	intptr_t Get();
+	audio::FilterLP lp;
+};
+
+class Osc {
+public:
+	Osc();
+	void SetAmp(const float new_amp);
+	const float GetAmp();
+	void SetFreq(const float new_freq);
+	const float GetFreq();
+	void SetPhase(const float new_phase);
+	const float GetPhase();
+	void SetWave(const int new_wave);
+	const int GetWave();
+	void SetOut(intptr_t new_out);
+	intptr_t Get();
+	audio::Oscillator osc;
+};
+
+#endif

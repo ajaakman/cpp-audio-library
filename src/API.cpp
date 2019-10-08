@@ -1,190 +1,87 @@
-#define USING_SDL2
 #include "./API.h"
+#include "./Globals.h"
 
-#include "./Components/Component.h"
-#include "./Components/Oscillator.h"
-#include "./Components/FilterLP.h"
+namespace audio {
+	static std::array<std::atomic<bool>, audio::CHANNELS<size_t>> clip_flag;
 
-using namespace audio;
+	void ClipCallback(const size_t channel, const bool status) // TODO.
+	{
+		clip_flag[channel] = status;
+	}
+}
 
-#ifdef USING_SDL2
-#include "./Audio/SDL2Audio.h"
-SDL2Audio synth;
+#ifdef EMSCRIPTEN
+
+//----------------------------------------------------------------------------------------------
+const int Master::InitAudio() { return synth.InitAudio(); }
+
+void Master::SetAmp(const float new_amp) { synth.masterMixer.SetAmplitude(new_amp); }
+
+const float Master::GetAmp() { return synth.masterMixer.GetAmplitude(); };
+
+intptr_t Master::Get() { return reinterpret_cast<intptr_t>(&synth.masterMixer); }
+
+//----------------------------------------------------------------------------------------------
+Osc::Osc() :osc() {}
+
+void Osc::SetAmp(const float new_amp) { osc.SetAmplitude(new_amp); }
+
+const float Osc::GetAmp() { return osc.GetAmplitude(); }
+
+void Osc::SetFreq(const float new_freq) { osc.SetFrequency(new_freq); }
+
+const float Osc::GetFreq() { return osc.GetFrequency(); }
+
+void Osc::SetPhase(const float new_phase) { osc.SetPhase(new_phase); }
+
+const float Osc::GetPhase() { return osc.GetPhase(); }
+
+void Osc::SetWave(const int new_wave) { osc.SetWave(static_cast<audio::Oscillator::Wave>(new_wave)); }
+
+const int Osc::GetWave() { return static_cast<int>(osc.GetWave()); }
+
+void Osc::SetOut(intptr_t new_out) { osc.SetOutput(reinterpret_cast<audio::Component*>(new_out)); }
+
+intptr_t Osc::Get() { return reinterpret_cast<intptr_t>(&osc); }
+
+//----------------------------------------------------------------------------------------------
+LP::LP() :lp() {}
+
+void LP::SetCutoff(const float new_freq) { lp.SetCutoff(new_freq); }
+
+const float LP::GetCutoff() { return lp.GetCutoff(); }
+
+void LP::SetOut(intptr_t new_out) { lp.SetOutput(reinterpret_cast<audio::Component*>(new_out)); }
+
+intptr_t LP::Get() { return reinterpret_cast<intptr_t>(&lp); }
+
+//----------------------------------------------------------------------------------------------
+EMSCRIPTEN_BINDINGS(my_module) {
+	emscripten::class_<Master>("Master")
+		.constructor<>()
+		.function("InitAudio", &Master::InitAudio)
+		.function("SetAmp", &Master::SetAmp)
+		.function("GetAmp", &Master::GetAmp)
+		.function("Get", &Master::Get);
+
+	emscripten::class_<LP>("LP")
+		.constructor<>()
+		.function("SetCutoff", &LP::SetCutoff)
+		.function("GetCutoff", &LP::GetCutoff)
+		.function("SetOut", &LP::SetOut)
+		.function("Get", &LP::Get);
+
+	emscripten::class_<Osc>("Osc")
+		.constructor<>()
+		.function("SetAmp", &Osc::SetAmp)
+		.function("GetAmp", &Osc::GetAmp)
+		.function("SetFreq", &Osc::SetFreq)
+		.function("GetFreq", &Osc::GetFreq)
+		.function("SetPhase", &Osc::SetPhase)
+		.function("GetPhase", &Osc::GetPhase)
+		.function("SetWave", &Osc::SetWave)
+		.function("GetWave", &Osc::GetWave)
+		.function("SetOut", &Osc::SetOut)
+		.function("Get", &Osc::Get);
+}
 #endif
-
-const int InitAudio()
-{
-	return synth.InitAudio();
-}
-
-void MasterSetAmp(const float dNewAmplitude)
-{
-	synth.LockAudioThread();
-	synth.masterMixer.SetAmplitude(dNewAmplitude);
-	synth.UnlockAudioThread();
-}
-
-const bool IsOutClipping()
-{
-	synth.LockAudioThread();
-	volatile bool result = false;
-	for (const auto& channel : synth.masterMixer.IsOutClipping())
-	{
-		if (channel) result = true;
-	}
-	synth.UnlockAudioThread();
-	return result;
-}
-
-void ClipCallback(const size_t channel, const bool status)
-{
-	// std::cout << channel << " " << status << std::endl; // TODO. Finish Callback.
-}
-
-const intptr_t MasterComp()
-{
-	synth.LockAudioThread();
-	const volatile intptr_t masterMixer = reinterpret_cast<intptr_t>(&synth.masterMixer);
-	synth.UnlockAudioThread();
-
-	return masterMixer;
-}
-
-const float MasterGetAmp()
-{
-	synth.LockAudioThread();
-	volatile float amplitude = synth.masterMixer.GetAmplitude();
-	synth.UnlockAudioThread();
-
-	return amplitude;
-}
-
-void CompDelete(const intptr_t component)
-{
-	synth.LockAudioThread();
-	delete reinterpret_cast<Component*>(component);
-	synth.UnlockAudioThread();
-}
-
-const bool CompSetOut(const intptr_t component, const intptr_t output)
-{
-	synth.LockAudioThread();
-	volatile bool result = reinterpret_cast<Component*>(component)->SetOutput(reinterpret_cast<Component*>(output));
-	synth.UnlockAudioThread();
-	return result;
-}
-
-const intptr_t CompGetOut(const intptr_t component)
-{
-	synth.LockAudioThread();
-	const volatile Component* comp = reinterpret_cast<Component*>(component)->GetOutput();
-	synth.UnlockAudioThread();
-	return reinterpret_cast<intptr_t>(comp);
-}
-
-// New components get inserted here with python script.
-
-const intptr_t CompAddOsc()
-{
-	return reinterpret_cast<intptr_t>(new Oscillator);
-}
-
-void OscSetFreq(const intptr_t component, const float dNewFrequency)
-{
-	synth.LockAudioThread();
-	reinterpret_cast<Oscillator*>(component)->SetFrequency(dNewFrequency);
-	synth.UnlockAudioThread();
-}
-
-const float OscGetFreq(const intptr_t component)
-{
-	synth.LockAudioThread();
-	volatile float freq = reinterpret_cast<Oscillator*>(component)->GetFrequency();
-	synth.UnlockAudioThread();
-
-	return freq;
-}
-
-void OscSetAmp(const intptr_t component, const float dNewAmplitude)
-{
-	synth.LockAudioThread();
-	reinterpret_cast<Oscillator*>(component)->SetAmplitude(dNewAmplitude);
-	synth.UnlockAudioThread();
-}
-
-const float OscGetAmp(const intptr_t component)
-{
-	synth.LockAudioThread();
-	volatile float amp = reinterpret_cast<Oscillator*>(component)->GetAmplitude();
-	synth.UnlockAudioThread();
-
-	return amp;
-}
-
-void OscSetPhase(const intptr_t component, const float dNewPhase)
-{
-	synth.LockAudioThread();
-	reinterpret_cast<Oscillator*>(component)->SetPhase(dNewPhase);
-	synth.UnlockAudioThread();
-}
-
-const float OscGetPhase(const intptr_t component)
-{
-	synth.LockAudioThread();
-	volatile float phase = reinterpret_cast<Oscillator*>(component)->GetPhase();
-	synth.UnlockAudioThread();
-
-	return phase;
-}
-
-void OscSetWave(const intptr_t component, const int dNewWave)
-{
-	synth.LockAudioThread();
-	reinterpret_cast<Oscillator*>(component)->SetWave(static_cast<Oscillator::Wave>(dNewWave));
-	synth.UnlockAudioThread();
-}
-
-const int OscGetWave(const intptr_t component)
-{
-	synth.LockAudioThread();
-	volatile int wave = reinterpret_cast<Oscillator*>(component)->GetWave();
-	synth.UnlockAudioThread();
-
-	return wave;
-}
-
-const intptr_t CompAddLP()
-{
-	return reinterpret_cast<intptr_t>(new FilterLP());
-}
-
-void LPSetCutoff(const intptr_t component, const float dNewCutoff)
-{
-	synth.LockAudioThread();
-	reinterpret_cast<FilterLP*>(component)->SetCutoff(dNewCutoff);
-	synth.UnlockAudioThread();
-}
-
-const float LPGetCutoff(const intptr_t component)
-{
-	synth.LockAudioThread();
-	volatile float cutoff = reinterpret_cast<FilterLP*>(component)->GetCutoff();
-	synth.UnlockAudioThread();
-
-	return cutoff;
-}
-
-const std::vector<intptr_t> CompGetIn(const intptr_t component)
-{
-	std::vector<intptr_t> result;
-
-	synth.LockAudioThread();
-	result.reserve(reinterpret_cast<Component*>(component)->GetInputs().size());
-	for (const auto& input : reinterpret_cast<Component*>(component)->GetInputs())
-	{
-		result.push_back(reinterpret_cast<intptr_t>(input));
-	}
-	synth.UnlockAudioThread();
-
-	return result;
-}

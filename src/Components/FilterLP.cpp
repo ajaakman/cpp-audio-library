@@ -25,12 +25,12 @@ namespace audio {
 		m_dPrevSample = dSample;
 	}
 
-	void FilterLP::SetCutoff(const float& dNewCutoff)
+	void FilterLP::SetCutoff(const float dNewCutoff)
 	{
 		m_dCutoff = std::clamp(dNewCutoff, 1.0f, 20000.0f);
 	}
 
-	const float& FilterLP::GetCutoff() const
+	const float FilterLP::GetCutoff() const
 	{
 		return m_dCutoff;
 	}

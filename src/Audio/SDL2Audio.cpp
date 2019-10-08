@@ -108,6 +108,7 @@ namespace audio
 		for (size_t i = 0; i < m_Buffer.size(); i += CHANNELS<size_t>)
 		{
 			auto out = masterMixer.GetMasterOutput();
+
 			for (size_t j = 0; j < CHANNELS<size_t>; j++)
 			{
 				m_Buffer[i + j] = out[j];

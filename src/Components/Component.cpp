@@ -1,5 +1,5 @@
 #include "./Component.h"
-#include <iostream>
+
 namespace audio
 {
 	double* Component::m_dTime = nullptr;
@@ -27,6 +27,10 @@ namespace audio
 		// Must not receive input from self.
 		if (input == this) return false;
 		// Prevent same input from being added multiple times.
+		/*if (std::binary_search(m_Inputs.begin(), m_Inputs.end(), input))
+		{
+			return false;
+		}*/
 		for (const auto& in : m_Inputs)
 		{
 			if (in == input) return false;
@@ -49,7 +53,7 @@ namespace audio
 		return false;
 	};
 
-	const bool Component::SetOutput(Component* const& newOuput)
+	const bool Component::SetOutput(Component* const newOuput)
 	{
 		// Must not output in to self.
 		if (newOuput == this) return false;		

@@ -18,21 +18,21 @@ namespace audio
 
 		virtual void CalcSample(std::array<float, CHANNELS<size_t>>& dSample) override;
 
-		void SetAmplitude(const float& dNewAmplitude);
-		const float& GetAmplitude() const;
-		void SetFrequency(const float& dNewFrequency);
-		const float& GetFrequency() const;
-		void SetPhase(const float& dNewPhase);
-		const float& GetPhase() const;
-		void SetWave(const Wave& newWave);
-		const Wave& GetWave() const;
+		void SetAmplitude(const float dNewAmplitude);
+		const float GetAmplitude() const;
+		void SetFrequency(const float dNewFrequency);
+		const float GetFrequency() const;
+		void SetPhase(const float dNewPhase);
+		const float GetPhase() const;
+		void SetWave(const Wave newWave);
+		const Wave GetWave() const;
 	private:
 		const float SineWave() const;
 
 	private:
-		Wave m_Wave;
-		float m_dFrequency;
-		float m_dAmplitude;
-		float m_dPhase;
+		std::atomic<Wave> m_Wave;
+		std::atomic<float> m_dFrequency;
+		std::atomic<float> m_dAmplitude;
+		std::atomic<float> m_dPhase;
 	};
 }
