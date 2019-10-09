@@ -6,7 +6,7 @@
 namespace audio
 {
 	MasterMixer::MasterMixer(double* const& dTime)
-		: m_dAmpTarget(0.0f), m_dAmplitude(0.0f), m_bChannelClip(), m_bClipTimer()
+		: m_dAmpTarget(0.0f), m_dAmplitude(0.0f), m_bChannelClip{ 0 }, m_bClipTimer{ 0 }
 	{
 		m_dTime = dTime;
 	}
@@ -44,7 +44,7 @@ namespace audio
 				if (m_bChannelClip[channel])
 				{
 					m_bChannelClip[channel] = value;
-					ClipCallback(channel, false);				
+					ClipCallback(channel, false);
 				}
 			}
 		}

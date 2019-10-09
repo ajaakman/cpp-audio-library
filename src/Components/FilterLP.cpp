@@ -3,13 +3,8 @@
 
 namespace audio {
 	FilterLP::FilterLP()
-		: m_dPrevSample(), m_dCutoff(20000.0f)
-	{
-		for (auto& sample : m_dPrevSample)
-		{
-			sample = 0.0f;
-		}
-	}
+		: m_dPrevSample{ 0.0f }, m_dCutoff(20000.0f)
+	{ }
 
 	void FilterLP::CalcSample(std::array<float, CHANNELS<size_t>>& dSample)
 	{

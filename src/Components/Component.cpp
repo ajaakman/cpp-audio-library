@@ -6,7 +6,9 @@ namespace audio
 
 	Component::Component()
 		: m_Output(nullptr), m_OutSample()
-	{}
+	{
+		m_Inputs.reserve(20);
+	}
 
 	Component::~Component()
 	{
@@ -16,10 +18,8 @@ namespace audio
 			m_Output->RemoveInput(this);
 		}
 		// Remove component from inputs.
-		for (const auto& input : m_Inputs)
-		{
-			input->SetOutput(nullptr);
-		}
+		std::for_each(m_Inputs.begin(), m_Inputs.end(),
+			[](const auto& input) { input->SetOutput(nullptr); });
 	}
 
 	const bool Component::AddInput(Component* const& input)
@@ -27,13 +27,10 @@ namespace audio
 		// Must not receive input from self.
 		if (input == this) return false;
 		// Prevent same input from being added multiple times.
-		/*if (std::binary_search(m_Inputs.begin(), m_Inputs.end(), input))
+
+		if (std::find(m_Inputs.begin(), m_Inputs.end(), input) != m_Inputs.end())
 		{
 			return false;
-		}*/
-		for (const auto& in : m_Inputs)
-		{
-			if (in == input) return false;
 		}
 
 		m_Inputs.push_back(input);
@@ -43,8 +40,9 @@ namespace audio
 	const bool Component::RemoveInput(Component* const& input)
 	{
 		// AddInput ensures the inputs are unique so we only need to remove the first one encountered.
-		const auto it = std::find(m_Inputs.begin(), m_Inputs.end(), input);
-		if (it != m_Inputs.end())
+				
+		if (const auto it = std::find(m_Inputs.begin(), m_Inputs.end(), input); 
+			it != m_Inputs.end())
 		{
 			m_Inputs.erase(it);
 			return true;
@@ -56,7 +54,7 @@ namespace audio
 	const bool Component::SetOutput(Component* const newOuput)
 	{
 		// Must not output in to self.
-		if (newOuput == this) return false;		
+		if (newOuput == this) return false;
 		// Remove component from old output.
 		if (m_Output != nullptr)
 		{
@@ -89,10 +87,7 @@ namespace audio
 
 	std::array<float, CHANNELS<size_t>>& Component::CombineInputs()
 	{
-		for (auto& sample : m_OutSample)
-		{
-			sample = 0.0f;
-		}
+		std::fill(m_OutSample.begin(), m_OutSample.end(), 0.0f);
 
 		for (const auto& input : m_Inputs)
 		{

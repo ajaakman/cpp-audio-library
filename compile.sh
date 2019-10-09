@@ -11,5 +11,5 @@ emcc -std=c++17 \
 -s WASM=1 \
 -o "../react-audio/public/audio.js" \
 -s ENVIRONMENT=web \
--Oz \
+-O3 \
 -s ASSERTIONS=1

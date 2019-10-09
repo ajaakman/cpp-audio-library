@@ -3,7 +3,7 @@
 namespace audio
 {
 	SDL2Audio::SDL2Audio()
-		: masterMixer(&m_dTime), m_Device(NULL), m_dTime(0.0f), m_Buffer()
+		: masterMixer(&m_dTime), m_Device(NULL), m_dTime(0.0f), m_Buffer{ 0 }
 	{	}
 
 	SDL2Audio::~SDL2Audio()
@@ -119,7 +119,7 @@ namespace audio
 			if (m_dTime > OSC_TUNE_ACC<double>)
 			{
 				double intpart;
-				m_dTime = modf(m_dTime, &intpart);			
+				m_dTime = modf(m_dTime, &intpart);
 			}
 		}
 
