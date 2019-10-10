@@ -60,7 +60,7 @@ void TestLoop(std::map<std::string, intptr_t>& components)
 		}
 		else if (command == "IsOutClipping")
 		{
-			if (IsOutClipping())
+			if (isOutClipping())
 				cout << "Yes" << endl;
 			else
 				cout << "No" << endl;

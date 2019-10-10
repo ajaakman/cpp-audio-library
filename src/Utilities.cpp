@@ -2,7 +2,7 @@
 
 namespace audio
 {
-	const float& Utilities::Lerp(float& dValue, const float& dTarget, const float& dSpeed, const float& dMin, const float& dMax)
+	const float& Utilities::lerp(float& dValue, const float& dTarget, const float& dSpeed, const float& dMin, const float& dMax)
 	{
 		// If the current value is not similar to the target value, add or subtract the factor.
 		if (dValue < dTarget - dSpeed || dValue > dTarget + dSpeed)

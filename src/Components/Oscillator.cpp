@@ -7,25 +7,25 @@
 namespace audio
 {
 	Oscillator::Oscillator()
-		: m_dFrequency(0.0f), m_dAmplitude(0.0f), m_dPhase(0.0f), m_Wave(Sine)
+		: m_frequency(0.0f), m_amplitude(0.0f), m_phase(0.0f), m_wave(Sine)
 	{}
 
-	void Oscillator::CalcSample(std::array<float, CHANNELS<size_t>>& dSample)
+	void Oscillator::writeSamples(std::array<float, CHANNELS<size_t>>& samples)
 	{
 		float wave = 0.0f;
-		switch (m_Wave)
+		switch (m_wave)
 		{
 		case audio::Oscillator::Sine:
-			wave = SineWave();
+			wave = sineWave();
 			break;
 		case audio::Oscillator::Square:
-			wave = signbit(SineWave());
+			wave = signbit(sineWave());
 			break;
 		case audio::Oscillator::Triangle:
-			wave = asin(SineWave()) * TWO_OVER_PI<float>;
+			wave = asin(sineWave()) * TWO_OVER_PI<float>;
 			break;
 		case audio::Oscillator::Saw:
-			wave = -2.0f / PI<float> * atan(1.0f / tan(m_dFrequency * SampleTime() * PI<float> +(m_dPhase * PI<float>)));
+			wave = -2.0f / PI<float> * atan(1.0f / tan(m_frequency * getTime() * PI<float> +(m_phase * PI<float>)));
 			break;
 		case audio::Oscillator::Noise:
 			wave = 2.0f * (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) - 1.0f;
@@ -34,56 +34,56 @@ namespace audio
 			break;
 		}
 
-		for (auto& sample : dSample)
+		for (auto& sample : samples)
 		{
 			sample += wave;
-			sample *= m_dAmplitude;
+			sample *= m_amplitude;
 		}
 	}
 
-	const float Oscillator::SineWave() const
+	const float Oscillator::sineWave() const
 	{
-		return sin(m_dFrequency * TWO_PI<float> * SampleTime() + (m_dPhase * TWO_PI<float>));
+		return sin(m_frequency * TWO_PI<float> * getTime() + (m_phase * TWO_PI<float>));
 	}
 
-	void Oscillator::SetAmplitude(const float dNewAmplitude)
+	void Oscillator::setAmplitude(const float new_amplitude)
 	{
-		m_dAmplitude = std::clamp(dNewAmplitude, 0.0f, 1.0f);
+		m_amplitude = std::clamp(new_amplitude, 0.0f, 1.0f);
 	}
 
-	const float Oscillator::GetAmplitude() const
+	const float Oscillator::getAmplitude() const
 	{
-		return m_dAmplitude;
+		return m_amplitude;
 	}
 
-	void Oscillator::SetFrequency(const float dNewFrequency)
+	void Oscillator::setFrequency(const float new_frequency)
 	{
-		m_dFrequency = roundf(std::clamp(dNewFrequency, 0.0f, 20000.0f) * OSC_TUNE_ACC<float>) / OSC_TUNE_ACC<float>;
+		m_frequency = roundf(std::clamp(new_frequency, 0.0f, 20000.0f) * OSC_TUNE_ACC<float>) / OSC_TUNE_ACC<float>;
 	}
 
-	const float Oscillator::GetFrequency() const
+	const float Oscillator::getFrequency() const
 	{
-		return m_dFrequency;
+		return m_frequency;
 	}
 
-	void Oscillator::SetPhase(const float dNewPhase)
+	void Oscillator::setPhase(const float new_phase)
 	{
 		float temp;
-		m_dPhase = abs(modf(dNewPhase, &temp));
+		m_phase = abs(modf(new_phase, &temp));
 	}
 
-	const float Oscillator::GetPhase() const
+	const float Oscillator::getPhase() const
 	{
-		return m_dPhase;
+		return m_phase;
 	}
 
-	void Oscillator::SetWave(const Wave newWave)
+	void Oscillator::setWave(const Wave new_wave)
 	{
-		m_Wave = newWave;
+		m_wave = new_wave;
 	}
 
-	const Oscillator::Wave Oscillator::GetWave() const
+	const Oscillator::Wave Oscillator::getWave() const
 	{
-		return m_Wave;
+		return m_wave;
 	}
 }

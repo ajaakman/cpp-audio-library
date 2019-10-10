@@ -2,109 +2,109 @@
 
 namespace audio
 {
-	double* Component::m_dTime = nullptr;
+	double* Component::m_time = nullptr;
 
 	Component::Component()
-		: m_Output(nullptr), m_OutSample()
+		: m_output(nullptr), m_outSamples()
 	{
-		m_Inputs.reserve(20);
+		m_inputs.reserve(20);
 	}
 
 	Component::~Component()
 	{
 		// Remove component from output.
-		if (m_Output != nullptr)
+		if (m_output != nullptr)
 		{
-			m_Output->RemoveInput(this);
+			m_output->removeInput(this);
 		}
 		// Remove component from inputs.
-		std::for_each(m_Inputs.begin(), m_Inputs.end(),
-			[](const auto& input) { input->SetOutput(nullptr); });
+		std::for_each(m_inputs.begin(), m_inputs.end(),
+			[](const auto& input) { input->setOutput(nullptr); });
 	}
 
-	const bool Component::AddInput(Component* const& input)
+	const bool Component::addInput(Component* const input)
 	{
 		// Must not receive input from self.
 		if (input == this) return false;
 		// Prevent same input from being added multiple times.
 
-		if (std::find(m_Inputs.begin(), m_Inputs.end(), input) != m_Inputs.end())
+		if (std::find(m_inputs.begin(), m_inputs.end(), input) != m_inputs.end())
 		{
 			return false;
 		}
 
-		m_Inputs.push_back(input);
+		m_inputs.push_back(input);
 		return true;
 	};
 
-	const bool Component::RemoveInput(Component* const& input)
+	const bool Component::removeInput(Component* const input)
 	{
 		// AddInput ensures the inputs are unique so we only need to remove the first one encountered.
 				
-		if (const auto it = std::find(m_Inputs.begin(), m_Inputs.end(), input); 
-			it != m_Inputs.end())
+		if (const auto it = std::find(m_inputs.begin(), m_inputs.end(), input); 
+			it != m_inputs.end())
 		{
-			m_Inputs.erase(it);
+			m_inputs.erase(it);
 			return true;
 		}
 
 		return false;
 	};
 
-	const bool Component::SetOutput(Component* const newOuput)
+	const bool Component::setOutput(Component* const new_output)
 	{
 		// Must not output in to self.
-		if (newOuput == this) return false;
+		if (new_output == this) return false;
 		// Remove component from old output.
-		if (m_Output != nullptr)
+		if (m_output != nullptr)
 		{
-			m_Output->RemoveInput(this);
+			m_output->removeInput(this);
 		}
 		// Add component to new output.
-		if (newOuput != nullptr)
+		if (new_output != nullptr)
 		{
-			newOuput->AddInput(this);
+			new_output->addInput(this);
 		}
 
-		m_Output = newOuput;
+		m_output = new_output;
 		return true;
 	};
 
-	const std::vector<Component*>& Component::GetInputs() const
+	const std::vector<Component*>& Component::getInputs() const
 	{
-		return m_Inputs;
+		return m_inputs;
 	}
 
-	const Component* const Component::GetOutput() const
+	const Component* const Component::getOutput() const
 	{
-		return m_Output;
+		return m_output;
 	}
 
-	const float Component::SampleTime()
+	const float Component::getTime()
 	{
-		return static_cast<float>(*m_dTime);
+		return static_cast<float>(*m_time);
 	}
 
-	std::array<float, CHANNELS<size_t>>& Component::CombineInputs()
+	std::array<float, CHANNELS<size_t>>& Component::combineInputs()
 	{
-		std::fill(m_OutSample.begin(), m_OutSample.end(), 0.0f);
+		std::fill(m_outSamples.begin(), m_outSamples.end(), 0.0f);
 
-		for (const auto& input : m_Inputs)
+		for (const auto& input : m_inputs)
 		{
-			auto out = input->FinalOutput();
+			auto out = input->finalOutput();
 			for (size_t i = 0; i < out.size(); ++i)
 			{
-				m_OutSample[i] += out[i];
+				m_outSamples[i] += out[i];
 			}
 		}
 
-		return m_OutSample;
+		return m_outSamples;
 	}
 
-	const std::array<float, CHANNELS<size_t>>& Component::FinalOutput()
+	const std::array<float, CHANNELS<size_t>>& Component::finalOutput()
 	{
-		CombineInputs();
-		CalcSample(m_OutSample);
-		return m_OutSample;
+		combineInputs();
+		writeSamples(m_outSamples);
+		return m_outSamples;
 	};
 }

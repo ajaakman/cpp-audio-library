@@ -4,7 +4,7 @@
 namespace audio {
 	static std::array<std::atomic<bool>, audio::CHANNELS<size_t>> clip_flag;
 
-	void ClipCallback(const size_t channel, const bool status) // TODO.
+	void clipCallback(const size_t channel, const bool status) // TODO.
 	{
 		clip_flag[channel] = status;
 	}
@@ -13,75 +13,75 @@ namespace audio {
 #ifdef EMSCRIPTEN
 
 //----------------------------------------------------------------------------------------------
-const int Master::InitAudio() { return synth.InitAudio(); }
+const int Master::initAudio() { return synth.initAudio(); }
 
-void Master::SetAmp(const float new_amp) { synth.masterMixer.SetAmplitude(new_amp); }
+void Master::setAmp(const float new_amp) { synth.masterMixer.setAmplitude(new_amp); }
 
-const float Master::GetAmp() { return synth.masterMixer.GetAmplitude(); };
+const float Master::getAmp() { return synth.masterMixer.getAmplitude(); };
 
-intptr_t Master::Get() { return reinterpret_cast<intptr_t>(&synth.masterMixer); }
+intptr_t Master::get() { return reinterpret_cast<intptr_t>(&synth.masterMixer); }
 
 //----------------------------------------------------------------------------------------------
 Osc::Osc() :osc() {}
 
-void Osc::SetAmp(const float new_amp) { osc.SetAmplitude(new_amp); }
+void Osc::setAmp(const float new_amp) { osc.setAmplitude(new_amp); }
 
-const float Osc::GetAmp() { return osc.GetAmplitude(); }
+const float Osc::getAmp() { return osc.getAmplitude(); }
 
-void Osc::SetFreq(const float new_freq) { osc.SetFrequency(new_freq); }
+void Osc::setFreq(const float new_freq) { osc.setFrequency(new_freq); }
 
-const float Osc::GetFreq() { return osc.GetFrequency(); }
+const float Osc::getFreq() { return osc.getFrequency(); }
 
-void Osc::SetPhase(const float new_phase) { osc.SetPhase(new_phase); }
+void Osc::setPhase(const float new_phase) { osc.setPhase(new_phase); }
 
-const float Osc::GetPhase() { return osc.GetPhase(); }
+const float Osc::getPhase() { return osc.getPhase(); }
 
-void Osc::SetWave(const int new_wave) { osc.SetWave(static_cast<audio::Oscillator::Wave>(new_wave)); }
+void Osc::setWave(const int new_wave) { osc.setWave(static_cast<audio::Oscillator::Wave>(new_wave)); }
 
-const int Osc::GetWave() { return static_cast<int>(osc.GetWave()); }
+const int Osc::getWave() { return static_cast<int>(osc.getWave()); }
 
-void Osc::SetOut(intptr_t new_out) { osc.SetOutput(reinterpret_cast<audio::Component*>(new_out)); }
+void Osc::setOut(intptr_t new_out) { osc.setOutput(reinterpret_cast<audio::Component*>(new_out)); }
 
-intptr_t Osc::Get() { return reinterpret_cast<intptr_t>(&osc); }
+intptr_t Osc::get() { return reinterpret_cast<intptr_t>(&osc); }
 
 //----------------------------------------------------------------------------------------------
 LP::LP() :lp() {}
 
-void LP::SetCutoff(const float new_freq) { lp.SetCutoff(new_freq); }
+void LP::setCutoff(const float new_freq) { lp.setCutoff(new_freq); }
 
-const float LP::GetCutoff() { return lp.GetCutoff(); }
+const float LP::getCutoff() { return lp.getCutoff(); }
 
-void LP::SetOut(intptr_t new_out) { lp.SetOutput(reinterpret_cast<audio::Component*>(new_out)); }
+void LP::setOut(intptr_t new_out) { lp.setOutput(reinterpret_cast<audio::Component*>(new_out)); }
 
-intptr_t LP::Get() { return reinterpret_cast<intptr_t>(&lp); }
+intptr_t LP::get() { return reinterpret_cast<intptr_t>(&lp); }
 
 //----------------------------------------------------------------------------------------------
 EMSCRIPTEN_BINDINGS(my_module) {
 	emscripten::class_<Master>("Master")
 		.constructor<>()
-		.function("InitAudio", &Master::InitAudio)
-		.function("SetAmp", &Master::SetAmp)
-		.function("GetAmp", &Master::GetAmp)
-		.function("Get", &Master::Get);
+		.function("initAudio", &Master::initAudio)
+		.function("setAmp", &Master::setAmp)
+		.function("getAmp", &Master::getAmp)
+		.function("get", &Master::get);
 
 	emscripten::class_<LP>("LP")
 		.constructor<>()
-		.function("SetCutoff", &LP::SetCutoff)
-		.function("GetCutoff", &LP::GetCutoff)
-		.function("SetOut", &LP::SetOut)
-		.function("Get", &LP::Get);
+		.function("setCutoff", &LP::setCutoff)
+		.function("getCutoff", &LP::getCutoff)
+		.function("setOut", &LP::setOut)
+		.function("get", &LP::get);
 
 	emscripten::class_<Osc>("Osc")
 		.constructor<>()
-		.function("SetAmp", &Osc::SetAmp)
-		.function("GetAmp", &Osc::GetAmp)
-		.function("SetFreq", &Osc::SetFreq)
-		.function("GetFreq", &Osc::GetFreq)
-		.function("SetPhase", &Osc::SetPhase)
-		.function("GetPhase", &Osc::GetPhase)
-		.function("SetWave", &Osc::SetWave)
-		.function("GetWave", &Osc::GetWave)
-		.function("SetOut", &Osc::SetOut)
-		.function("Get", &Osc::Get);
+		.function("setAmp", &Osc::setAmp)
+		.function("getAmp", &Osc::getAmp)
+		.function("setFreq", &Osc::setFreq)
+		.function("getFreq", &Osc::getFreq)
+		.function("setPhase", &Osc::setPhase)
+		.function("getPhase", &Osc::getPhase)
+		.function("setWave", &Osc::setWave)
+		.function("getWave", &Osc::getWave)
+		.function("setOut", &Osc::setOut)
+		.function("get", &Osc::get);
 }
 #endif

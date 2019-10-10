@@ -3,7 +3,7 @@
 namespace audio
 {
 	SDL2Audio::SDL2Audio()
-		: masterMixer(&m_dTime), m_Device(NULL), m_dTime(0.0f), m_Buffer{ 0 }
+		: masterMixer(&m_time), m_device(NULL), m_time(0.0f), m_buffer{ 0 }
 	{	}
 
 	SDL2Audio::~SDL2Audio()
@@ -12,7 +12,7 @@ namespace audio
 		SDL_Quit();
 	}
 
-	const int SDL2Audio::InitAudio()
+	const int SDL2Audio::initAudio()
 	{
 		if (SDL_Init(SDL_INIT_AUDIO) != 0)
 		{
@@ -31,11 +31,11 @@ namespace audio
 		specin.format = AUDIO_F32;
 		specin.samples = BUFFER_SIZE<Uint16>;
 		specin.userdata = this;
-		specin.callback = ForwardAudioCallback;
+		specin.callback = forwardAudioCallback;
 
-		m_Device = SDL_OpenAudioDevice(NULL, 0, &specin, &specout, 0);
+		m_device = SDL_OpenAudioDevice(NULL, 0, &specin, &specout, 0);
 
-		if (!m_Device)
+		if (!m_device)
 		{
 			SDL_Log("Failed to initialize audio device!!! %s.", SDL_GetError());
 			return 102;
@@ -83,46 +83,46 @@ namespace audio
 			return 109;
 		}
 
-		SDL_PauseAudioDevice(m_Device, 0);
+		SDL_PauseAudioDevice(m_device, 0);
 
 		return 0;
 	}
 
-	void SDL2Audio::LockAudioThread()
+	void SDL2Audio::lockAudioThread()
 	{
-		SDL_LockAudioDevice(m_Device);
+		SDL_LockAudioDevice(m_device);
 	}
 
-	void SDL2Audio::UnlockAudioThread()
+	void SDL2Audio::unlockAudioThread()
 	{
-		SDL_UnlockAudioDevice(m_Device);
+		SDL_UnlockAudioDevice(m_device);
 	}
 
-	void SDL2Audio::ForwardAudioCallback(void* const userdata, Uint8* const stream, const int streamLength)
+	void SDL2Audio::forwardAudioCallback(void* const userdata, Uint8* const stream, const int stream_length)
 	{
-		static_cast<SDL2Audio*>(userdata)->AudioCallback(stream, streamLength);
+		static_cast<SDL2Audio*>(userdata)->audioCallback(stream, stream_length);
 	}
 
-	void SDL2Audio::AudioCallback(Uint8* const& stream, const int& streamLength)
+	void SDL2Audio::audioCallback(Uint8* const& stream, const int& stream_length)
 	{
-		for (size_t i = 0; i < m_Buffer.size(); i += CHANNELS<size_t>)
+		for (size_t i = 0; i < m_buffer.size(); i += CHANNELS<size_t>)
 		{
-			auto out = masterMixer.GetMasterOutput();
+			auto out = masterMixer.getMasterOutput();
 
 			for (size_t j = 0; j < CHANNELS<size_t>; j++)
 			{
-				m_Buffer[i + j] = out[j];
+				m_buffer[i + j] = out[j];
 			}
 
-			m_dTime += 1.0 / SAMPLE_RATE<double>;
+			m_time += 1.0 / SAMPLE_RATE<double>;
 
-			if (m_dTime > OSC_TUNE_ACC<double>)
+			if (m_time > OSC_TUNE_ACC<double>)
 			{
 				double intpart;
-				m_dTime = modf(m_dTime, &intpart);
+				m_time = modf(m_time, &intpart);
 			}
 		}
 
-		SDL_memcpy(stream, &m_Buffer[0], streamLength);
+		SDL_memcpy(stream, &m_buffer[0], stream_length);
 	}
 }

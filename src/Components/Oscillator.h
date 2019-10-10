@@ -16,23 +16,23 @@ namespace audio
 
 		enum Wave { Sine, Square, Triangle, Saw, Noise };
 
-		virtual void CalcSample(std::array<float, CHANNELS<size_t>>& dSample) override;
+		virtual void writeSamples(std::array<float, CHANNELS<size_t>>& samples) override;
 
-		void SetAmplitude(const float dNewAmplitude);
-		const float GetAmplitude() const;
-		void SetFrequency(const float dNewFrequency);
-		const float GetFrequency() const;
-		void SetPhase(const float dNewPhase);
-		const float GetPhase() const;
-		void SetWave(const Wave newWave);
-		const Wave GetWave() const;
+		void setAmplitude(const float new_amplitude);
+		const float getAmplitude() const;
+		void setFrequency(const float new_frequency);
+		const float getFrequency() const;
+		void setPhase(const float new_phase);
+		const float getPhase() const;
+		void setWave(const Wave new_wave);
+		const Wave getWave() const;
 	private:
-		const float SineWave() const;
+		const float sineWave() const;
 
 	private:
-		std::atomic<Wave> m_Wave;
-		std::atomic<float> m_dFrequency;
-		std::atomic<float> m_dAmplitude;
-		std::atomic<float> m_dPhase;
+		std::atomic<Wave> m_wave;
+		std::atomic<float> m_frequency;
+		std::atomic<float> m_amplitude;
+		std::atomic<float> m_phase;
 	};
 }

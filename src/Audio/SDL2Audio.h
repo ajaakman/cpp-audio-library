@@ -19,21 +19,21 @@ namespace audio
 		SDL2Audio& operator=(const SDL2Audio&) = delete;
 		SDL2Audio& operator=(SDL2Audio&&) = delete;
 
-		virtual const int InitAudio() override;
-		virtual void LockAudioThread() override;
-		virtual void UnlockAudioThread() override;
+		virtual const int initAudio() override;
+		virtual void lockAudioThread() override;
+		virtual void unlockAudioThread() override;
 
 	public:
 		MasterMixer masterMixer;
 
 	private:
-		static void ForwardAudioCallback(void* const userdata, Uint8* const stream, const int streamLength);
-		void AudioCallback(Uint8* const& stream, const int& streamLength);
+		static void forwardAudioCallback(void* const userdata, Uint8* const stream, const int stream_length);
+		void audioCallback(Uint8* const& stream, const int& stream_length);
 
 	private:
-		SDL_AudioDeviceID m_Device;
-		std::array<float, CHANNELS<size_t>* BUFFER_SIZE<size_t>> m_Buffer;
+		SDL_AudioDeviceID m_device;
+		std::array<float, CHANNELS<size_t>* BUFFER_SIZE<size_t>> m_buffer;
 
-		double m_dTime;
+		double m_time;
 	};
 }

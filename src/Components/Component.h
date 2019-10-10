@@ -18,30 +18,30 @@ namespace audio
 		Component& operator=(const Component&) = delete;
 		Component& operator=(Component&&) = delete;
 
-		virtual const bool SetOutput(Component* const newOuput);
+		virtual const bool setOutput(Component* const new_output);
 
 	protected:
-		virtual const bool AddInput(Component* const& input);
-		virtual const bool RemoveInput(Component* const& input);
-		virtual const std::vector<Component*>& GetInputs() const;
-		virtual const Component* const GetOutput() const;
+		virtual const bool addInput(Component* const input);
+		virtual const bool removeInput(Component* const input);
+		virtual const std::vector<Component*>& getInputs() const;
+		virtual const Component* const getOutput() const;
 
-		static const float SampleTime();
+		static const float getTime();
 
 	private:
-		// CalcSample() runs for every audio sample and should assign a new value to the dSample input parameter variable.
-		virtual void CalcSample(std::array<float, CHANNELS<size_t>>& dSample) = 0;
+		// writeSamples() runs for every audio sample and should assign a new value to the dSample input parameter variable.
+		virtual void writeSamples(std::array<float, CHANNELS<size_t>>& samples) = 0;
 
 		friend class MasterMixer;
 
-		const std::array<float, CHANNELS<size_t>>& FinalOutput();
-		std::array<float, CHANNELS<size_t>>& CombineInputs();
+		const std::array<float, CHANNELS<size_t>>& finalOutput();
+		std::array<float, CHANNELS<size_t>>& combineInputs();
 
 	private:
-		static double* m_dTime;
-		std::array<float, CHANNELS<size_t>> m_OutSample;
+		static double* m_time;
+		std::array<float, CHANNELS<size_t>> m_outSamples;
 
-		std::vector<Component*> m_Inputs; // TODO. Change to stack allocated array.
-		Component* m_Output; // TODO. Make Atomic.
+		std::vector<Component*> m_inputs; // TODO. Change to stack allocated array.
+		Component* m_output; // TODO. Make Atomic.
 	};
 }

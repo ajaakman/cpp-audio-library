@@ -7,29 +7,29 @@ namespace audio
 	class MasterMixer final : public Component
 	{
 	public:
-		MasterMixer(double* const& dTime);
+		MasterMixer(double* const time);
 		~MasterMixer() = default;
 		MasterMixer(const MasterMixer&) = delete;
 		MasterMixer(MasterMixer&&) = delete;
 		MasterMixer& operator=(const MasterMixer&) = delete;
 		MasterMixer& operator=(MasterMixer&&) = delete;
 
-		virtual void CalcSample(std::array<float, CHANNELS<size_t>>& dSample) override;
-		virtual const bool SetOutput(Component* const newOutput) override;
-		const std::array<float, CHANNELS<size_t>>& GetMasterOutput();
-		const std::array<std::atomic<bool>, CHANNELS<size_t>>& IsOutClipping();
+		virtual void writeSamples(std::array<float, CHANNELS<size_t>>& samples) override;
+		virtual const bool setOutput(Component* const new_output) override;
+		const std::array<float, CHANNELS<size_t>>& getMasterOutput();
+		const std::array<std::atomic<bool>, CHANNELS<size_t>>& isOutClipping();
 
-		void SetAmplitude(const float& dNewAmplitude);
-		const float GetAmplitude();
+		void setAmplitude(const float new_amplitude);
+		const float getAmplitude();
 	protected:
-		virtual const Component* const GetOutput() const override;
+		virtual const Component* const getOutput() const override;
 	private:
-		void SetChannelClip(size_t channel, bool value);
+		void setChannelClip(size_t channel, bool value);
 
 	private:
-		float m_dAmplitude;
-		std::atomic<float> m_dAmpTarget;
-		std::array<std::atomic<bool>, CHANNELS<size_t>> m_bChannelClip;
-		std::array<unsigned, CHANNELS<size_t>> m_bClipTimer;
+		float m_amplitude;
+		std::atomic<float> m_amp_target;
+		std::array<std::atomic<bool>, CHANNELS<size_t>> m_channel_clip;
+		std::array<unsigned, CHANNELS<size_t>> m_clip_timer;
 	};
 }

@@ -37,7 +37,7 @@ else if (command == "CompAdd"#COMP)																								\
 else if (command == #COMP"Get"#PARAM)																							\
 {																																\
 	COMPLOOKUP																													\
-		cout << #LCOMP": " << it->first << " "#LPARAM": " << COMP##Get##PARAM(it->second) << "." << endl;						\
+		cout << #LCOMP": " << it->first << " "#LPARAM": " << COMP##get##PARAM(it->second) << "." << endl;						\
 }
 
 #define SETTER(COMP, PARAM, LCOMP, LPARAM, TYPE, MESSAGE)																		\
@@ -64,7 +64,7 @@ else if (command == #COMP"Set"#PARAM)																							\
 				break;																											\
 			}																													\
 			COMP##Set##PARAM(it->second, val);																					\
-			cout << #LCOMP" " << it->first << " "#LPARAM" Set To: " << COMP##Get##PARAM(components[it->first]) << "." << endl;	\
+			cout << #LCOMP" " << it->first << " "#LPARAM" Set To: " << COMP##get##PARAM(components[it->first]) << "." << endl;	\
 		}																														\
 		catch (invalid_argument)																								\
 		{																														\

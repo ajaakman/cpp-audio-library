@@ -5,78 +5,78 @@
 
 namespace audio
 {
-	MasterMixer::MasterMixer(double* const& dTime)
-		: m_dAmpTarget(0.0f), m_dAmplitude(0.0f), m_bChannelClip{ 0 }, m_bClipTimer{ 0 }
+	MasterMixer::MasterMixer(double* const time)
+		: m_amp_target(0.0f), m_amplitude(0.0f), m_channel_clip{ 0 }, m_clip_timer{ 0 }
 	{
-		m_dTime = dTime;
+		m_time = time;
 	}
 
-	void MasterMixer::CalcSample(std::array<float, CHANNELS<size_t>>& dSample)
+	void MasterMixer::writeSamples(std::array<float, CHANNELS<size_t>>& samples)
 	{
-		for (size_t i = 0; i < dSample.size(); ++i)
+		for (size_t i = 0; i < samples.size(); ++i)
 		{
 			// Lerp the master amplitude before applying it to the final ouput to prevent audio clicks.
-			dSample[i] *= Utilities::Lerp(m_dAmplitude, m_dAmpTarget, 0.0005f, 0.0f, 1.0f);
+			samples[i] *= Utilities::lerp(m_amplitude, m_amp_target, (20.0f / SAMPLE_RATE<float>), 0.0f, 1.0f);
 
-			SetChannelClip(i, dSample[i] > 1.0f ? true : false);
+			setChannelClip(i, samples[i] > 1.0f ? true : false);
 		}
 	}
 
-	void MasterMixer::SetChannelClip(size_t channel, bool value)
+	void MasterMixer::setChannelClip(size_t channel, bool value)
 	{
 		if (value)
 		{
-			m_bClipTimer[channel] = SAMPLE_RATE<unsigned>;
-			if (!m_bChannelClip[channel])
+			m_clip_timer[channel] = SAMPLE_RATE<unsigned>;
+			if (!m_channel_clip[channel])
 			{
-				m_bChannelClip[channel] = value;
-				ClipCallback(channel, true);
+				m_channel_clip[channel] = value;
+				clipCallback(channel, true);
 			}
 		}
 		else
 		{
-			if (m_bClipTimer[channel])
+			if (m_clip_timer[channel])
 			{
-				--m_bClipTimer[channel];
+				--m_clip_timer[channel];
 			}
 			else
 			{
-				if (m_bChannelClip[channel])
+				if (m_channel_clip[channel])
 				{
-					m_bChannelClip[channel] = value;
-					ClipCallback(channel, false);
+					m_channel_clip[channel] = value;
+					clipCallback(channel, false);
 				}
 			}
 		}
 	}
 
-	const bool MasterMixer::SetOutput(Component* const newOutput)
+	const bool MasterMixer::setOutput(Component* const new_output)
 	{
 		return false;
 	}
 
-	const Component* const MasterMixer::GetOutput() const
+	const Component* const MasterMixer::getOutput() const
 	{
 		return nullptr;
 	}
 
-	const std::array<float, CHANNELS<size_t>>& MasterMixer::GetMasterOutput()
+	const std::array<float, CHANNELS<size_t>>& MasterMixer::getMasterOutput()
 	{
-		return FinalOutput();
+		return finalOutput();
 	}
 
-	const std::array<std::atomic<bool>, CHANNELS<size_t>>& MasterMixer::IsOutClipping()
+	const std::array<std::atomic<bool>, CHANNELS<size_t>>& MasterMixer::isOutClipping()
 	{
-		return m_bChannelClip;
+		return m_channel_clip;
 	}
 
-	void MasterMixer::SetAmplitude(const float& dNewAmplitude)
+	void MasterMixer::setAmplitude(const float new_amplitude)
 	{
-		m_dAmpTarget = std::clamp(dNewAmplitude, 0.0f, 1.0f);
+		m_amp_target = std::clamp(new_amplitude, 0.0f, 1.0f);
 	}
 
-	const float MasterMixer::GetAmplitude()
+	const float MasterMixer::getAmplitude()
 	{
-		return m_dAmpTarget;
+		return m_amp_target;
 	}
 }
