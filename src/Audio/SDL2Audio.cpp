@@ -55,10 +55,15 @@ namespace audio
 
         int threadReturnValue;
         SDL_WaitThread(audioThread, &threadReturnValue);
-        SDL_Log("\nThread returned value: %d", threadReturnValue);
+
+        SDL_PauseAudioDevice(m_device, 1);
+
+        SDL_Log("Audio thread returned value: %d", threadReturnValue);                
 
         SDL_DestroyCond(cvAudioThreadReady);
         SDL_DestroyMutex(mtxAudioLock);
+
+        SDL_CloseAudioDevice(m_device);
 
 		SDL_QuitSubSystem(SDL_INIT_AUDIO);
 		SDL_Quit();
@@ -135,8 +140,6 @@ namespace audio
 			return 109;
 		}
 
-		SDL_PauseAudioDevice(m_device, 0);
-
         cvAudioThreadReady = SDL_CreateCond();
         mtxAudioLock = SDL_CreateMutex();
 
@@ -144,7 +147,14 @@ namespace audio
 
         if (audioThread == NULL) {
             SDL_Log("SDL_CreateThread failed: %s\n", SDL_GetError());
+            return 110;
         }
+
+        if (!m_audioReadyFlag)
+        {
+            SDL_CondWait(cvAudioThreadReady, mtxAudioLock);
+        }
+        SDL_PauseAudioDevice(m_device, 0);
 
 		return 0;
 	}
@@ -168,6 +178,7 @@ namespace audio
 	{
         if (!m_audioReadyFlag)
         {
+            SDL_Log("Warning: Poor Audio Performance!!!");
             SDL_CondWait(cvAudioThreadReady, mtxAudioLock);
         }
 

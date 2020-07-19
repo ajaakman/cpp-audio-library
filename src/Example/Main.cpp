@@ -41,6 +41,16 @@ int main(int argc, char** argv)
 	dynamic_cast<Oscillator*>(components["osc3"].get())->setAmplitude(1.0f);
 	dynamic_cast<Oscillator*>(components["osc3"].get())->setPhase(0.0f);
 	dynamic_cast<Oscillator*>(components["osc3"].get())->setWave(Oscillator::Wave::Saw);
+
+    /*for (size_t i = 4; i < 20; i++)
+    {
+        components["osc" + i] = make_unique<Oscillator>();
+        components["osc" + i]->setOutput(components["lp"].get());
+        dynamic_cast<Oscillator*>(components["osc" + i].get())->setFrequency(880.0f);
+        dynamic_cast<Oscillator*>(components["osc" + i].get())->setAmplitude(1.0f);
+        dynamic_cast<Oscillator*>(components["osc" + i].get())->setPhase(0.0f);
+        dynamic_cast<Oscillator*>(components["osc" + i].get())->setWave(Oscillator::Wave::Saw);
+    }*/
 	
 	components["lp"]->setOutput(reinterpret_cast<Component*>(&synth->masterMixer));
 	dynamic_cast<FilterLP*>(components["lp"].get())->setCutoff(10000.0f);
@@ -50,8 +60,8 @@ int main(int argc, char** argv)
 	for (const auto& component : components)
 		component.second->setOutput(nullptr);
 
-	for (auto itr = components.begin(); itr != components.end(); ++itr)
-		components.erase(itr);
+	/*for (auto itr = components.begin(); itr != components.end(); ++itr)
+		components.erase(itr);*/
 
 	return 0;
 }
