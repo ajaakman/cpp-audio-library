@@ -2,12 +2,72 @@
 
 namespace audio
 {
+    int processAudio(void* ptr)
+    {
+        SDL_SetThreadPriority(SDL_THREAD_PRIORITY_HIGH);
+        SDL2Audio* const& parent = reinterpret_cast<SDL2Audio*>(ptr);
+
+        // TODO. Add exit condition.
+        while (!parent->m_shuttingDown)
+        {
+            SDL_LockMutex(parent->audio_lock);
+            if (!parent->m_dataCopied)
+            {
+                SDL_CondWait(parent->cvAudioCopied, parent->audio_lock);
+            }
+            SDL_UnlockMutex(parent->audio_lock);
+
+            for (size_t i = 0; i < parent->m_buffer.size(); i += CHANNELS<size_t>)
+            {
+                auto out = parent->masterMixer.getMasterOutput();
+
+                for (size_t j = 0; j < CHANNELS<size_t>; j++)
+                {
+                    parent->m_buffer[i + j] = out[j];
+                }
+
+                parent->m_time += 1.0 / SAMPLE_RATE<double>;
+
+                if (parent->m_time > OSC_TUNE_ACC<double>)
+                {
+                    double intpart;
+                    parent->m_time = modf(parent->m_time, &intpart);
+                }
+            }
+            parent->m_dataCopied = false;
+
+            SDL_CondSignal(parent->cvAudioReadyToCopy);
+            SDL_LockMutex(parent->sdl_lock);
+            parent->m_dataReady = true;
+            SDL_UnlockMutex(parent->sdl_lock);
+        }
+        return 0;
+    }
+
 	SDL2Audio::SDL2Audio()
-		: masterMixer(&m_time), m_device(NULL), m_time(0.0f), m_buffer{ 0 }
+		: masterMixer(&m_time)
+        , m_device(NULL)
+        , m_buffer{ 0 }
+        , m_time(0.0f)
+        , m_dataReady(false)
+        , m_dataCopied(true)
+        , m_shuttingDown(false)
 	{	}
 
 	SDL2Audio::~SDL2Audio()
 	{
+        // Mark audio thread for shutdown and wait for it to finish.
+        m_shuttingDown = true;
+
+        int threadReturnValue;
+        SDL_WaitThread(audioThread, &threadReturnValue);
+        SDL_Log("\nThread returned value: %d", threadReturnValue);
+
+        SDL_DestroyCond(cvAudioReadyToCopy);
+        SDL_DestroyCond(cvAudioCopied);
+        SDL_DestroyMutex(sdl_lock);
+        SDL_DestroyMutex(audio_lock);
+
 		SDL_QuitSubSystem(SDL_INIT_AUDIO);
 		SDL_Quit();
 	}
@@ -85,6 +145,18 @@ namespace audio
 
 		SDL_PauseAudioDevice(m_device, 0);
 
+        cvAudioReadyToCopy = SDL_CreateCond();
+        cvAudioCopied = SDL_CreateCond();
+
+        sdl_lock = SDL_CreateMutex();
+        audio_lock = SDL_CreateMutex();
+
+        audioThread = SDL_CreateThread(audio::processAudio, "AudioThread", (void*)this);
+
+        if (audioThread == NULL) {
+            SDL_Log("SDL_CreateThread failed: %s\n", SDL_GetError());
+        }
+
 		return 0;
 	}
 
@@ -105,24 +177,19 @@ namespace audio
 
 	void SDL2Audio::audioCallback(Uint8* const& stream, const int& stream_length)
 	{
-		for (size_t i = 0; i < m_buffer.size(); i += CHANNELS<size_t>)
-		{
-			auto out = masterMixer.getMasterOutput();
-
-			for (size_t j = 0; j < CHANNELS<size_t>; j++)
-			{
-				m_buffer[i + j] = out[j];
-			}
-
-			m_time += 1.0 / SAMPLE_RATE<double>;
-
-			if (m_time > OSC_TUNE_ACC<double>)
-			{
-				double intpart;
-				m_time = modf(m_time, &intpart);
-			}
-		}
+        SDL_LockMutex(sdl_lock);
+        if (!m_dataReady)
+        {
+            SDL_CondWait(cvAudioReadyToCopy, sdl_lock);
+        }
+        SDL_UnlockMutex(sdl_lock);
 
 		SDL_memcpy(stream, &m_buffer[0], stream_length);
+        m_dataReady = false;
+
+        SDL_CondSignal(cvAudioCopied);
+        SDL_LockMutex(audio_lock);
+        m_dataCopied = true;
+        SDL_UnlockMutex(audio_lock);
 	}
 }
