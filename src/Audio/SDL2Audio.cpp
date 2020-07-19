@@ -2,7 +2,9 @@
 
 namespace audio
 {
-    int processAudio(void* ptr)
+    int SDL2Audio::s_sdl_initialised = 0;
+
+    static int processAudio(void* ptr)
     {
         SDL_SetThreadPriority(SDL_THREAD_PRIORITY_HIGH);
         SDL2Audio* const& parent = reinterpret_cast<SDL2Audio*>(ptr);
@@ -64,19 +66,25 @@ namespace audio
         SDL_DestroyMutex(mtxAudioLock);
 
         SDL_CloseAudioDevice(m_device);
-
-		SDL_QuitSubSystem(SDL_INIT_AUDIO);
-		SDL_Quit();
+        
+        if (s_sdl_initialised-- == 1)
+        {
+		    SDL_QuitSubSystem(SDL_INIT_AUDIO);
+		    SDL_Quit();
+        }
 	}
 
 	const int SDL2Audio::initAudio()
 	{
-		if (SDL_Init(SDL_INIT_AUDIO) != 0)
-		{
-			SDL_Log("Unable to initialize SDL: %s.", SDL_GetError());
-			return 101;
-		}
-
+        if (!s_sdl_initialised++)
+        {
+            if (SDL_Init(SDL_INIT_AUDIO) != 0)
+            {
+                SDL_Log("Unable to initialize SDL: %s.", SDL_GetError());
+                return 101;
+            }
+        }
+        
 		SDL_AudioSpec specin;
 		SDL_AudioSpec specout;
 
@@ -178,8 +186,8 @@ namespace audio
 	{
         if (!m_audioReadyFlag)
         {
-            SDL_Log("Warning: Poor Audio Performance!!!");
             SDL_CondWait(cvAudioThreadReady, mtxAudioLock);
+            SDL_Log("Warning: Poor Audio Performance!!!");
         }
 
 		SDL_memcpy(stream, &m_buffer[0], stream_length);

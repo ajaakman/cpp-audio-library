@@ -13,16 +13,26 @@ int main(int argc, char** argv)
 	map<string, unique_ptr<Component>> components;
 
 #ifdef USING_SDL2
-	unique_ptr<audio::SDL2Audio> synth = make_unique<audio::SDL2Audio>();
+    unique_ptr<audio::SDL2Audio> synth = make_unique<audio::SDL2Audio>();
+    unique_ptr<audio::SDL2Audio> synth1 = make_unique<audio::SDL2Audio>();
 #endif
 
-	synth->initAudio();
-	synth->masterMixer.setAmplitude(0.02f);
+    synth->initAudio();
+    synth1->initAudio();
+    synth->masterMixer.setAmplitude(0.02f);
+    //synth1->masterMixer.setAmplitude(0.02f);
 
-	components["osc1"] = make_unique<Oscillator>();
+    components["osc1"] = make_unique<Oscillator>();
 	components["osc2"] = make_unique<Oscillator>();
 	components["osc3"] = make_unique<Oscillator>();
 	components["lp"] = make_unique<FilterLP>();
+
+    /*components["osc4"] = make_unique<Oscillator>();
+    components["osc4"]->setOutput(reinterpret_cast<Component*>(&synth1->masterMixer));
+    dynamic_cast<Oscillator*>(components["osc4"].get())->setFrequency(110.0f);
+    dynamic_cast<Oscillator*>(components["osc4"].get())->setAmplitude(0.5f);
+    dynamic_cast<Oscillator*>(components["osc4"].get())->setPhase(0.0f);
+    dynamic_cast<Oscillator*>(components["osc4"].get())->setWave(Oscillator::Wave::Saw);*/
 
 	components["osc1"]->setOutput(components["lp"].get());
 	dynamic_cast<Oscillator*>(components["osc1"].get())->setFrequency(220.0f);

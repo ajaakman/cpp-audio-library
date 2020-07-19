@@ -43,5 +43,6 @@ namespace audio
 		double m_time;
         bool m_audioReadyFlag;
         bool m_shuttingDown;
+        static int s_sdl_initialised;
 	};
 }
