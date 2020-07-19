@@ -2,8 +2,10 @@
 #include "../Utilities.h"
 
 namespace audio {
-	FilterLP::FilterLP()
-		: m_prev_samples{ 0.0f }, m_cutoff(20000.0f)
+	FilterLP::FilterLP(const MasterMixer& masterMixer)
+		: Component(masterMixer)
+        , m_prev_samples{ 0.0f }
+        , m_cutoff(20000.0f)
 	{ }
 
 	void FilterLP::writeSamples(std::array<float, CHANNELS<size_t>>& samples)

@@ -7,12 +7,14 @@ namespace audio
 	class MasterMixer final : public Component
 	{
 	public:
-		MasterMixer(double* const time);
+		MasterMixer(const double& time);
 		~MasterMixer() = default;
 		MasterMixer(const MasterMixer&) = delete;
 		MasterMixer(MasterMixer&&) = delete;
 		MasterMixer& operator=(const MasterMixer&) = delete;
 		MasterMixer& operator=(MasterMixer&&) = delete;
+
+        const double& getTimeRef() const { return m_globalTime; }
 
 		virtual void writeSamples(std::array<float, CHANNELS<size_t>>& samples) override;
 		virtual const bool setOutput(Component* const new_output) override;
@@ -28,6 +30,7 @@ namespace audio
 
 	private:
 		float m_amplitude;
+        const double& m_globalTime;
 		std::atomic<float> m_amp_target;
 		std::array<std::atomic<bool>, CHANNELS<size_t>> m_channel_clip;
 		std::array<unsigned, CHANNELS<size_t>> m_clip_timer;

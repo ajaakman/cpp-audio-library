@@ -2,12 +2,16 @@
 
 #include "../Utilities.h"
 
-#include <math.h>
+#include <cmath>
 
 namespace audio
 {
-	Oscillator::Oscillator()
-		: m_frequency(0.0f), m_amplitude(0.0f), m_phase(0.0f), m_wave(Sine)
+	Oscillator::Oscillator(const MasterMixer& masterMixer)
+		: Component(masterMixer)
+        , m_frequency(0.0f)
+        , m_amplitude(0.0f)
+        , m_phase(0.0f)
+        , m_wave(Sine)
 	{}
 
 	void Oscillator::writeSamples(std::array<float, CHANNELS<size_t>>& samples)
@@ -41,7 +45,7 @@ namespace audio
 		}
 	}
 
-	const float Oscillator::sineWave() const
+	const float Oscillator::sineWave()
 	{
 		return sin(m_frequency * TWO_PI<float> * getTime() + (m_phase * TWO_PI<float>));
 	}

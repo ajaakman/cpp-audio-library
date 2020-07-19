@@ -42,7 +42,7 @@ namespace audio
     }
 
 	SDL2Audio::SDL2Audio()
-		: masterMixer(&m_time)
+		: masterMixer(m_time)
         , m_device(NULL)
         , m_buffer{ 0 }
         , m_time(0.0f)

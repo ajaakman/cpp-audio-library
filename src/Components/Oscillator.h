@@ -7,7 +7,7 @@ namespace audio
 	class Oscillator final : public Component
 	{
 	public:
-		Oscillator();
+		Oscillator(const MasterMixer& masterMixer);
 		~Oscillator() = default;
 		Oscillator(const Oscillator&) = delete;
 		Oscillator(Oscillator&&) = delete;
@@ -27,7 +27,7 @@ namespace audio
 		void setWave(const Wave new_wave);
 		const Wave getWave() const;
 	private:
-		const float sineWave() const;
+		const float sineWave();
 
 	private:
 		std::atomic<Wave> m_wave;

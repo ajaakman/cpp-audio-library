@@ -5,10 +5,9 @@
 
 namespace audio
 {
-	MasterMixer::MasterMixer(double* const time)
-		: m_amp_target(0.0f), m_amplitude(0.0f), m_channel_clip{ 0 }, m_clip_timer{ 0 }
+	MasterMixer::MasterMixer(const double& time)
+		: Component(*this), m_globalTime(time), m_amp_target(0.0f), m_amplitude(0.0f), m_channel_clip{ 0 }, m_clip_timer{ 0 }
 	{
-		m_time = time;
 	}
 
 	void MasterMixer::writeSamples(std::array<float, CHANNELS<size_t>>& samples)

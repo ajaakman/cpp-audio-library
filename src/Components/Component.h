@@ -8,10 +8,12 @@
 
 namespace audio
 {
+    class MasterMixer;
+
 	class Component
 	{
 	public:
-		Component();
+		Component(const MasterMixer& masterMixer);
 		virtual ~Component();
 		Component(const Component&) = delete; // TODO
 		Component(Component&&) = delete;
@@ -26,7 +28,7 @@ namespace audio
 		virtual const std::vector<Component*>& getInputs() const;
 		virtual const Component* const getOutput() const;
 
-		static const float getTime();
+		float getTime();
 
 	private:
 		// writeSamples() runs for every audio sample and should assign a new value to the dSample input parameter variable.
@@ -38,7 +40,7 @@ namespace audio
 		std::array<float, CHANNELS<size_t>>& combineInputs();
 
 	private:
-		static double* m_time;
+		const double& m_time;
 		std::array<float, CHANNELS<size_t>> m_outSamples;
 
 		std::vector<Component*> m_inputs; // TODO. Change to stack allocated array.

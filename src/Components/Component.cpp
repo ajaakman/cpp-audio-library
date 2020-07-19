@@ -1,11 +1,10 @@
 #include "./Component.h"
+#include "./MasterMixer.h"
 
 namespace audio
 {
-	double* Component::m_time = nullptr;
-
-	Component::Component()
-		: m_output(nullptr), m_outSamples()
+	Component::Component(const MasterMixer& masterMixer)
+		: m_time(masterMixer.getTimeRef()), m_output(nullptr), m_outSamples()
 	{
 		m_inputs.reserve(20);
 	}
@@ -80,9 +79,9 @@ namespace audio
 		return m_output;
 	}
 
-	const float Component::getTime()
+	float Component::getTime()
 	{
-		return static_cast<float>(*m_time);
+		return static_cast<float>(m_time);
 	}
 
 	std::array<float, CHANNELS<size_t>>& Component::combineInputs()

@@ -7,7 +7,7 @@ namespace audio
 	class FilterLP final : public Component
 	{
 	public:
-		FilterLP();
+		FilterLP(const MasterMixer& masterMixer);
 		~FilterLP() = default;
 		FilterLP(const FilterLP&) = delete;
 		FilterLP(FilterLP&&) = delete;
