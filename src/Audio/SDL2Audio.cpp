@@ -10,12 +10,10 @@ namespace audio
         // TODO. Add exit condition.
         while (!parent->m_shuttingDown)
         {
-            SDL_LockMutex(parent->audio_lock);
-            if (!parent->m_dataCopied)
+            if (parent->m_audioReadyFlag)
             {
-                SDL_CondWait(parent->cvAudioCopied, parent->audio_lock);
+                SDL_CondWait(parent->cvAudioThreadReady, parent->mtxAudioLock);
             }
-            SDL_UnlockMutex(parent->audio_lock);
 
             for (size_t i = 0; i < parent->m_buffer.size(); i += CHANNELS<size_t>)
             {
@@ -34,12 +32,9 @@ namespace audio
                     parent->m_time = modf(parent->m_time, &intpart);
                 }
             }
-            parent->m_dataCopied = false;
 
-            SDL_CondSignal(parent->cvAudioReadyToCopy);
-            SDL_LockMutex(parent->sdl_lock);
-            parent->m_dataReady = true;
-            SDL_UnlockMutex(parent->sdl_lock);
+            parent->m_audioReadyFlag = true;
+            SDL_CondSignal(parent->cvAudioThreadReady);
         }
         return 0;
     }
@@ -49,8 +44,7 @@ namespace audio
         , m_device(NULL)
         , m_buffer{ 0 }
         , m_time(0.0f)
-        , m_dataReady(false)
-        , m_dataCopied(true)
+        , m_audioReadyFlag(false)
         , m_shuttingDown(false)
 	{	}
 
@@ -63,10 +57,8 @@ namespace audio
         SDL_WaitThread(audioThread, &threadReturnValue);
         SDL_Log("\nThread returned value: %d", threadReturnValue);
 
-        SDL_DestroyCond(cvAudioReadyToCopy);
-        SDL_DestroyCond(cvAudioCopied);
-        SDL_DestroyMutex(sdl_lock);
-        SDL_DestroyMutex(audio_lock);
+        SDL_DestroyCond(cvAudioThreadReady);
+        SDL_DestroyMutex(mtxAudioLock);
 
 		SDL_QuitSubSystem(SDL_INIT_AUDIO);
 		SDL_Quit();
@@ -145,11 +137,8 @@ namespace audio
 
 		SDL_PauseAudioDevice(m_device, 0);
 
-        cvAudioReadyToCopy = SDL_CreateCond();
-        cvAudioCopied = SDL_CreateCond();
-
-        sdl_lock = SDL_CreateMutex();
-        audio_lock = SDL_CreateMutex();
+        cvAudioThreadReady = SDL_CreateCond();
+        mtxAudioLock = SDL_CreateMutex();
 
         audioThread = SDL_CreateThread(audio::processAudio, "AudioThread", (void*)this);
 
@@ -177,19 +166,14 @@ namespace audio
 
 	void SDL2Audio::audioCallback(Uint8* const& stream, const int& stream_length)
 	{
-        SDL_LockMutex(sdl_lock);
-        if (!m_dataReady)
+        if (!m_audioReadyFlag)
         {
-            SDL_CondWait(cvAudioReadyToCopy, sdl_lock);
+            SDL_CondWait(cvAudioThreadReady, mtxAudioLock);
         }
-        SDL_UnlockMutex(sdl_lock);
 
 		SDL_memcpy(stream, &m_buffer[0], stream_length);
-        m_dataReady = false;
 
-        SDL_CondSignal(cvAudioCopied);
-        SDL_LockMutex(audio_lock);
-        m_dataCopied = true;
-        SDL_UnlockMutex(audio_lock);
+        m_audioReadyFlag = false;
+        SDL_CondSignal(cvAudioThreadReady);
 	}
 }

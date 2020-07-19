@@ -37,14 +37,11 @@ namespace audio
 		std::array<float, CHANNELS<size_t>* BUFFER_SIZE<size_t>> m_buffer;
 
         SDL_Thread* audioThread{ nullptr };
-        SDL_cond* cvAudioReadyToCopy{ nullptr };
-        SDL_cond* cvAudioCopied{ nullptr };
-        SDL_mutex* sdl_lock{ nullptr };
-        SDL_mutex* audio_lock{ nullptr };
+        SDL_cond* cvAudioThreadReady{ nullptr };
+        SDL_mutex* mtxAudioLock{ nullptr };
 
 		double m_time;
-        bool m_dataReady;
-        bool m_dataCopied;
+        bool m_audioReadyFlag;
         bool m_shuttingDown;
 	};
 }
